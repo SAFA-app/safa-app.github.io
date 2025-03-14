@@ -13,6 +13,6 @@
       "type": "image/png"
     }
   ],
-  "orientation": "portrait",  // Optional: Lock the app in portrait or landscape mode
+  "orientation": "portrait",
   "prefer_related_applications": true
 }
