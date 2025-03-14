@@ -1,0 +1,11 @@
+{
+    "appTitle": "My Simple CSV Viewer",
+    "welcomeMessage": "Welcome to the CSV Data Viewer!",
+    "dataColumns": [
+      "Column 1",
+      "Column 2",
+      "Column 3"
+    ],
+    "theme": "light"
+  }
+  

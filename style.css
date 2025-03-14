@@ -1,0 +1,18 @@
+css
+body {
+  font-family: Arial, sans-serif;
+}
+
+#app {
+  margin: 20px;
+}
+
+h1 {
+  color: #333;
+}
+
+#data div {
+  background-color: #f9f9f9;
+  padding: 8px;
+  margin: 5px 0;
+}
