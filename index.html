@@ -3,14 +3,28 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#000000">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  
+  <!-- For Android and iOS to ensure app appears like a native app -->
+  <meta name="theme-color" content="#000000"> <!-- Set theme color for mobile browsers -->
+  <meta name="apple-mobile-web-app-capable" content="yes"> <!-- iOS: Hides the address bar -->
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"> <!-- iOS: Controls the status bar -->
+  
+  <!-- Android-specific meta tag to hide the address bar -->
+  <meta name="mobile-web-app-capable" content="yes"> <!-- Android: Hides the address bar -->
+  
+  <!-- Set the app title for iOS home screen (optional) -->
   <meta name="apple-mobile-web-app-title" content="Simple PWA App">
+
   <title>Simple PWA App</title>
+  
+  <!-- Link to the manifest.json file -->
   <link rel="manifest" href="/manifest.json">
+  
+  <!-- External JavaScript file (app.js) -->
   <script src="app.js" defer></script>
+  
+  <!-- External CSS file (style.css) -->
   <link rel="stylesheet" href="style.css">
 </head>
 
