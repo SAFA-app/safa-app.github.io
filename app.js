@@ -16,6 +16,9 @@ async function fetchData() {
       div.innerText = row.join(' - '); // Show each row of the CSV
       dataDiv.appendChild(div);
     });
+    // Cache the fetched data
+    const cache = await caches.open(CACHE_NAME);
+    cache.put(DATA_URL, new Response(text));
   } catch (error) {
     console.error('Failed to fetch data:', error);
     loadFromCache();
@@ -66,6 +69,8 @@ async function fetchConfig() {
 if (navigator.onLine) {
   fetchData();
   fetchConfig();
+} else {
+  loadFromCache();
 }
 
 // Service Worker setup
