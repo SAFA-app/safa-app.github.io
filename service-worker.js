@@ -1,4 +1,3 @@
-javascript
 const CACHE_NAME = 'pwa-cache-v1';
 const DATA_URL = 'https://raw.githubusercontent.com/mwaskom/seaborn-data/master/penguins.csv'; // Replace with your CSV file URL
 const CONFIG_URL = 'config.json'; // Replace with your configuration file URL
