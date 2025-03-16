@@ -39,6 +39,10 @@ async function loadFromCache() {
       div.innerText = row.join(' - '); // Show each row of the CSV
       dataDiv.appendChild(div);
     });
+  } else {
+    console.warn('No cached data found');
+    const dataDiv = document.getElementById('data');
+    dataDiv.innerHTML = '<p>No data available offline. Please go online to fetch data.</p>';
   }
 }
 
