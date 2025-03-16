@@ -72,7 +72,12 @@
         });
 
         // Generate a unique ID
-        document.getElementById('id').value = 'ID-' + crypto.randomUUID();
+        function generateId() {
+            return 'ID-' + crypto.randomUUID();
+        }
+
+        // Set the ID initially
+        document.getElementById('id').value = generateId();
 
         // Handle form submission
         document.getElementById('googleForm').addEventListener('submit', function (event) {
@@ -99,8 +104,10 @@
                 mode: "no-cors"
             }).then(() => {
                 alert("Form submitted successfully!");
+                // Reset the form but regenerate the ID
                 document.getElementById('googleForm').reset();
                 tinymce.get('content').setContent('');
+                document.getElementById('id').value = generateId(); // Regenerate the ID
             }).catch(error => {
                 alert("Error submitting form: " + error);
             });
