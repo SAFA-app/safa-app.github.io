@@ -20,6 +20,10 @@
 
     <h2>Submit Your Form</h2>
     <form id="googleForm">
+        <!-- New field for Form ID -->
+        <label>Google Form ID:</label>
+        <input type="text" id="formId" required><br><br>
+
         <label>ID (Auto-filled, Read-only):</label>
         <input type="text" id="id" name="entry.1896761587" readonly required><br><br>
 
@@ -83,7 +87,16 @@
         document.getElementById('googleForm').addEventListener('submit', function (event) {
             event.preventDefault();
 
-            const formUrl = "https://docs.google.com/forms/d/e/1FAIpQLSd1MdExT1814168haRWNrxUuPDe0jyMP1I9RPKMOyXonZDY2Q/formResponse";
+            // Get the form ID entered by the user
+            const formId = document.getElementById('formId').value.trim();
+
+            if (!formId) {
+                alert("Please provide a valid Google Form ID.");
+                return;
+            }
+
+            // Construct the form URL dynamically
+            const formUrl = `https://docs.google.com/forms/d/e/${formId}/formResponse`;
 
             const formData = new FormData();
             formData.append("entry.1896761587", document.getElementById('id').value);
@@ -112,118 +125,6 @@
                 alert("Error submitting form: " + error);
             });
         });
-
-        // Load Parent options from Google Sheets JSON
-        // Google Sheets URL in Google Visualization API format
-        const googleSheetsUrl = "https://docs.google.com/spreadsheets/d/1XL-g0mTwrsdM1oTYs4rHNklgjrbSlB_fAJ7YgFGDJxg/gviz/tq?tqx=out:json";
-
-        async function fetchData() {
-            try {
-                const response = await fetch(googleSheetsUrl);
-                const text = await response.text();
-
-                // Extract JSON part from the response
-                const jsonText = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\)/)[1];
-                const jsonData = JSON.parse(jsonText);
-
-                processParentOptions(jsonData);
-            } catch (error) {
-                console.error("Error fetching Google Sheets data:", error);
-            }
-        }
-
-        function processParentOptions(data) {
-            const columns = data.table.cols.map(col => col.label); // Column names
-            const idIndex = columns.indexOf("ID");
-            const titleIndex = columns.indexOf("title");
-            const deletedIndex = columns.indexOf("deleted");
-            const timestampIndex = columns.indexOf("Informazioni cronologiche");
-
-            const idMap = new Map();
-
-            data.table.rows.forEach(row => {
-                const cells = row.c;
-                const id = cells[idIndex]?.v;
-                const title = cells[titleIndex]?.v;
-                const deleted = cells[deletedIndex]?.v === "true";
-                const timestamp = cells[timestampIndex]?.f; // Formatted timestamp (dd/MM/yyyy H.mm.ss)
-
-                if (!id || !title || deleted) return; // Skip deleted or missing data
-
-                // Keep only the most recent entry per ID
-                if (!idMap.has(id) || isNewer(timestamp, idMap.get(id).timestamp)) {
-                    idMap.set(id, { title, timestamp });
-                }
-            });
-
-            populateDropdown([...idMap.entries()]);
-        }
-
-        function isNewer(newTimestamp, oldTimestamp) {
-            return parseTimestamp(newTimestamp) > parseTimestamp(oldTimestamp);
-        }
-
-        function parseTimestamp(timestamp) {
-            const [date, time] = timestamp.split(" ");
-            const [day, month, year] = date.split("/").map(Number);
-            const [hours, minutes, seconds] = time.split(".").map(Number);
-            return new Date(year, month - 1, day, hours, minutes, seconds).getTime();
-        }
-
-        function populateDropdown(idList) {
-            const parentSelect = document.getElementById("parent");
-            parentSelect.innerHTML = '<option value="">Select Parent</option>'; // Reset
-
-            idList.forEach(([id, { title }]) => {
-                const option = document.createElement("option");
-                option.value = id; // Submitted value
-                option.textContent = title; // Displayed text
-                parentSelect.appendChild(option);
-            });
-        }
-
-        // Load data on page load
-        document.addEventListener("DOMContentLoaded", fetchData);
-        document.getElementById("customPage").addEventListener("change", function () {
-            const isCustomPage = this.value === "true";
-
-            // Select fields to clear and disable
-            const fieldsToDisable = [
-                "subtitle",
-                "content",
-                "image",
-                "colour",
-                "externalLink"
-            ];
-
-            fieldsToDisable.forEach(fieldId => {
-                const field = document.getElementById(fieldId);
-
-                if (field) {
-                    if (isCustomPage) {
-                        field.value = ""; // Clear field
-                        field.setAttribute("disabled", "disabled"); // Disable field
-                    } else {
-                        field.removeAttribute("disabled"); // Enable field
-                    }
-                }
-            });
-
-            // Clear and disable TinyMCE editor separately
-            const editor = tinymce.get("content");
-            if (editor) {
-                editor.setContent(""); // Clear editor content
-                editor.mode.set(isCustomPage ? "readonly" : "design"); // ✅ Correct way in TinyMCE 6+
-            }
-
-
-        });
-
-        // Ensure the fields are in the correct state on page load
-        document.addEventListener("DOMContentLoaded", function () {
-            document.getElementById("customPage").dispatchEvent(new Event("change"));
-        });
-
     </script>
 
 </body>
