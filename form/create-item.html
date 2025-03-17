@@ -9,9 +9,7 @@
     <style>
         .editor-container {
             max-width: 800px;
-            /* Adjust width as needed */
             margin: 0 auto;
-            /* Centering the editor */
         }
     </style>
 </head>
@@ -20,7 +18,6 @@
 
     <h2>Submit Your Form</h2>
     <form id="googleForm">
-        <!-- New field for Form ID -->
         <label>Google Form ID:</label>
         <input type="text" id="formId" required><br><br>
 
@@ -56,17 +53,14 @@
         <label>Parent:</label>
         <select id="parent" name="entry.53127251">
             <option value="">Select Parent</option>
-            <!-- Parent options will be populated dynamically -->
         </select><br><br>
 
-        <!-- Hidden fields -->
         <input type="hidden" id="deleted" name="entry.1153953166">
 
         <button type="submit">Submit</button>
     </form>
 
     <script>
-        // Initialize TinyMCE
         tinymce.init({
             selector: '#content',
             plugins: 'advlist autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime media table help',
@@ -75,19 +69,15 @@
             branding: false
         });
 
-        // Generate a unique ID
         function generateId() {
             return 'ID-' + crypto.randomUUID();
         }
 
-        // Set the ID initially
         document.getElementById('id').value = generateId();
 
-        // Handle form submission
         document.getElementById('googleForm').addEventListener('submit', function (event) {
             event.preventDefault();
 
-            // Get the form ID entered by the user
             const formId = document.getElementById('formId').value.trim();
 
             if (!formId) {
@@ -95,7 +85,6 @@
                 return;
             }
 
-            // Construct the form URL dynamically
             const formUrl = `https://docs.google.com/forms/d/e/${formId}/formResponse`;
 
             const formData = new FormData();
@@ -110,24 +99,20 @@
             formData.append("entry.2143033031", document.getElementById('customPage').value);
             formData.append("entry.53127251", document.getElementById('parent').value);
 
-            // Send data via fetch API
             fetch(formUrl, {
                 method: "POST",
                 body: formData,
                 mode: "no-cors"
             }).then(() => {
                 alert("Form submitted successfully!");
-                // Reset the form but regenerate the ID
                 document.getElementById('googleForm').reset();
                 tinymce.get('content').setContent('');
-                document.getElementById('id').value = generateId(); // Regenerate the ID
+                document.getElementById('id').value = generateId();
             }).catch(error => {
                 alert("Error submitting form: " + error);
             });
+        });
 
-
-        }); // Load Parent options from Google Sheets JSON
-        // Google Sheets URL in Google Visualization API format
         const googleSheetsUrl = "https://docs.google.com/spreadsheets/d/1XL-g0mTwrsdM1oTYs4rHNklgjrbSlB_fAJ7YgFGDJxg/gviz/tq?tqx=out:json";
 
         async function fetchData() {
@@ -135,7 +120,6 @@
                 const response = await fetch(googleSheetsUrl);
                 const text = await response.text();
 
-                // Extract JSON part from the response
                 const jsonText = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\)/)[1];
                 const jsonData = JSON.parse(jsonText);
 
@@ -146,7 +130,7 @@
         }
 
         function processParentOptions(data) {
-            const columns = data.table.cols.map(col => col.label); // Column names
+            const columns = data.table.cols.map(col => col.label);
             const idIndex = columns.indexOf("ID");
             const titleIndex = columns.indexOf("title");
             const deletedIndex = columns.indexOf("deleted");
@@ -159,11 +143,10 @@
                 const id = cells[idIndex]?.v;
                 const title = cells[titleIndex]?.v;
                 const deleted = cells[deletedIndex]?.v === "true";
-                const timestamp = cells[timestampIndex]?.f; // Formatted timestamp (dd/MM/yyyy H.mm.ss)
+                const timestamp = cells[timestampIndex]?.f;
 
-                if (!id || !title || deleted) return; // Skip deleted or missing data
+                if (!id || !title || deleted) return;
 
-                // Keep only the most recent entry per ID
                 if (!idMap.has(id) || isNewer(timestamp, idMap.get(id).timestamp)) {
                     idMap.set(id, { title, timestamp });
                 }
@@ -185,58 +168,46 @@
 
         function populateDropdown(idList) {
             const parentSelect = document.getElementById("parent");
-            parentSelect.innerHTML = '<option value="">Select Parent</option>'; // Reset
+            parentSelect.innerHTML = '<option value="">Select Parent</option>';
 
             idList.forEach(([id, { title }]) => {
                 const option = document.createElement("option");
-                option.value = id; // Submitted value
-                option.textContent = title; // Displayed text
+                option.value = id;
+                option.textContent = title;
                 parentSelect.appendChild(option);
             });
         }
 
-        // Load data on page load
         document.addEventListener("DOMContentLoaded", fetchData);
         document.getElementById("customPage").addEventListener("change", function () {
             const isCustomPage = this.value === "true";
 
-            // Select fields to clear and disable
             const fieldsToDisable = [
-                "subtitle",
-                "content",
-                "image",
-                "colour",
-                "externalLink"
+                "subtitle", "content", "image", "colour", "externalLink"
             ];
 
             fieldsToDisable.forEach(fieldId => {
                 const field = document.getElementById(fieldId);
-
                 if (field) {
                     if (isCustomPage) {
-                        field.value = ""; // Clear field
-                        field.setAttribute("disabled", "disabled"); // Disable field
+                        field.value = "";
+                        field.setAttribute("disabled", "disabled");
                     } else {
-                        field.removeAttribute("disabled"); // Enable field
+                        field.removeAttribute("disabled");
                     }
                 }
             });
 
-            // Clear and disable TinyMCE editor separately
             const editor = tinymce.get("content");
             if (editor) {
-                editor.setContent(""); // Clear editor content
-                editor.mode.set(isCustomPage ? "readonly" : "design"); // ✅ Correct way in TinyMCE 6+
+                editor.setContent("");
+                editor.mode.set(isCustomPage ? "readonly" : "design");
             }
-
-
         });
 
-        // Ensure the fields are in the correct state on page load
         document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("customPage").dispatchEvent(new Event("change"));
         });
-
     </script>
 
 </body>
