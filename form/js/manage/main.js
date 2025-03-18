@@ -34,11 +34,20 @@ async function fetchValidPages() {
         keys.forEach(key => {
             if (key !== 'id') {
                 const cell = row.insertCell();
-                cell.textContent = String(page[key]);
+                const cellText = String(page[key]);
+
+
+                // Truncate text if it's too long
+                if (cellText.length > 40) {
+                    cell.textContent = cellText.slice(0, 40) + '...';
+                } else {
+                    cell.textContent = cellText;
+                }
             }
         });
     });
 }
+
 
 export async function deletePage() {
     const formId = document.getElementById('deletionFormId').value.trim();
