@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pwa-cache-v1';
+const CACHE_NAME = 'pwa-cache-v2';
 const DATA_URLS = [
   'https://docs.google.com/spreadsheets/d/1ZuUVyBmIU_Ax5V7Iq-yCUQvN-tmF8RZEh1uhkT6HVFA/export?format=csv',
   'https://docs.google.com/spreadsheets/d/1FVN90zGMNJbKOiBJWCVdVH7UFI74yny4G-3vJBzwrEo/export?format=csv'
@@ -19,22 +19,24 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
       caches.match(event.request).then((cachedResponse) => {
         const networkFetch = fetch(event.request).then((response) => {
-          // Update the cache with new data
-          return caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, response.clone());
+          if (response && response.status === 200) {
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, response.clone()); // Update cache
+            });
             return response;
-          });
+          }
+          return cachedResponse; // Return cached response if network fails
         });
 
-        // If there's cached data, return it immediately (stale)
-        // At the same time, fetch and update the cache in the background
+        // Serve cached content if offline, but always fetch to update cache
         return cachedResponse || networkFetch;
       })
     );
   }
 });
 
-// Activate event (clear old cache)
+
+
 self.addEventListener('activate', (event) => {
   const cacheWhitelist = [CACHE_NAME];
   event.waitUntil(
@@ -42,10 +44,11 @@ self.addEventListener('activate', (event) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
           if (!cacheWhitelist.includes(cacheName)) {
-            return caches.delete(cacheName);
+            return caches.delete(cacheName);  // Delete outdated caches
           }
         })
       );
     })
   );
 });
+
