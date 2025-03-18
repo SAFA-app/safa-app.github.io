@@ -13,21 +13,22 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// Fetch event
+// Fetch event with Stale-While-Revalidate strategy
 self.addEventListener('fetch', (event) => {
   if (DATA_URLS.includes(event.request.url)) {
     event.respondWith(
       caches.match(event.request).then((cachedResponse) => {
-        if (cachedResponse) {
-          return cachedResponse;  // Return cached data if available
-        }
-        return fetch(event.request).then((response) => {
-          // Cache the new response for future use
+        const networkFetch = fetch(event.request).then((response) => {
+          // Update the cache with new data
           return caches.open(CACHE_NAME).then((cache) => {
             cache.put(event.request, response.clone());
             return response;
           });
         });
+
+        // If there's cached data, return it immediately (stale)
+        // At the same time, fetch and update the cache in the background
+        return cachedResponse || networkFetch;
       })
     );
   }
