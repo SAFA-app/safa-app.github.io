@@ -1,6 +1,4 @@
-// main.js
-import config from '../config.js';  // Import configuration file
-import { getValidPages } from '../page-utils.js';  // Import utility function to fetch valid pages
+import { getValidPages } from '../page-utils.js'; // Import utility function to fetch valid pages
 
 async function fetchValidPages() {
     const validPages = await getValidPages();
@@ -42,13 +40,13 @@ export async function deletePage() {
     // Construct the POST request to the Google Form
     const formUrl = `https://docs.google.com/forms/d/e/${formId}/formResponse`;
     const formData = new FormData();
-    formData.append('entry.1372900842', selectedId);  // Field ID for entry identifier
+    formData.append('entry.1372900842', selectedId); // Field ID for entry identifier
 
     try {
         const response = await fetch(formUrl, {
             method: 'POST',
             body: formData,
-            mode: 'no-cors'  // Google Forms doesn't respond to CORS requests, we need 'no-cors'
+            mode: 'no-cors' // Google Forms doesn't respond to CORS requests, we need 'no-cors'
         });
 
         if (response.ok) {
@@ -66,3 +64,7 @@ export async function deletePage() {
 
 // Initialize the page
 fetchValidPages();
+
+// Add event listener for the delete button
+const deleteButton = document.querySelector('button');
+deleteButton.addEventListener('click', deletePage);
