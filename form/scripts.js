@@ -11,8 +11,8 @@ const config = {
     customPageField: "entry.2143033031",
     parentField: "entry.53127251",
     categoryField: "entry.1718811362",
-    pagesTable: "https://docs.google.com/spreadsheets/d/1ZuUVyBmIU_Ax5V7Iq-yCUQvN-tmF8RZEh1uhkT6HVFA/gviz/tq?tqx=out:json",
-    deletedTable: "https://docs.google.com/spreadsheets/d/1FVN90zGMNJbKOiBJWCVdVH7UFI74yny4G-3vJBzwrEo/gviz/tq?tqx=out:json"
+    pagesTable: "https://docs.google.com/spreadsheets/d/1ZuUVyBmIU_Ax5V7Iq-yCUQvN-tmF8RZEh1uhkT6HVFA/export?format=csv",
+    deletedTable: "https://docs.google.com/spreadsheets/d/1FVN90zGMNJbKOiBJWCVdVH7UFI74yny4G-3vJBzwrEo/export?format=csv"
 };
 
 // Initialize TinyMCE editor function
@@ -103,43 +103,26 @@ function handleCustomPageSelection() {
     document.getElementById("customPage").dispatchEvent(new Event("change"));
 }
 
-// Fetch and process data from Google Sheets
-async function fetchData(url) {
+// Function to fetch CSV data and parse it
+async function fetchCSVData(url) {
     try {
         const response = await fetch(url);
-        const text = await response.text();
-        const jsonText = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\)/)[1];
-        return JSON.parse(jsonText);
+        const csvText = await response.text();
+        return Papa.parse(csvText, { header: true, skipEmptyLines: true }).data;
     } catch (error) {
-        console.error("Error fetching Google Sheets data:", error);
-        return null;
+        console.error("Error fetching CSV data:", error);
+        return [];
     }
 }
 
 // Filter out the most recent version of each webpage based on 'Informazioni cronologiche'
 function filterMostRecentPages(data) {
-    if (!data || !data.table || !data.table.cols) {
-        console.error("Invalid data format:", data);
-        return [];
-    }
-
-    const columns = data.table.cols.map(col => col.label); // Extract column labels
-    const idIndex = columns.indexOf("ID");
-    const titleIndex = columns.indexOf("title");
-    const timestampIndex = columns.indexOf("Informazioni cronologiche");
-
-    if (idIndex === -1 || titleIndex === -1 || timestampIndex === -1) {
-        console.error("Required columns (ID, title, Informazioni cronologiche) not found.");
-        return [];
-    }
-
     const idMap = new Map();
 
-    data.table.rows.forEach(row => {
-        const cells = row.c;
-        const id = cells[idIndex]?.v;
-        const title = cells[titleIndex]?.v;
-        const timestamp = cells[timestampIndex]?.f;
+    data.forEach(row => {
+        const id = row.ID;
+        const title = row.title;
+        const timestamp = row["Informazioni cronologiche"];
 
         if (!id || !title || !timestamp) return;
 
@@ -152,10 +135,9 @@ function filterMostRecentPages(data) {
     return Array.from(idMap.values());
 }
 
-
 // Filter out pages that are in the deletedTable
-function filterDeletedPages(pages, deletedTable) {
-    const deletedIds = new Set(deletedTable.map(row => row.ID)); // Create a Set of deleted IDs
+function filterDeletedPages(pages, deletedData) {
+    const deletedIds = new Set(deletedData.map(row => row.ID)); // Create a Set of deleted IDs
 
     return pages.filter(page => !deletedIds.has(page.id));
 }
@@ -189,8 +171,8 @@ function populateDropdown(pages) {
 // Main function to initialize the dropdown with pages data
 async function initializeDropdown() {
     // Fetch pages and deleted pages data
-    const pagesData = await fetchData(config.pagesTable);
-    const deletedData = await fetchData(config.deletedTable);
+    const pagesData = await fetchCSVData(config.pagesTable);
+    const deletedData = await fetchCSVData(config.deletedTable);
 
     if (!pagesData || !deletedData) {
         console.error("Failed to fetch data.");
@@ -201,7 +183,7 @@ async function initializeDropdown() {
     const recentPages = filterMostRecentPages(pagesData);
 
     // Filter out deleted pages
-    const validPages = filterDeletedPages(recentPages, deletedData.table.rows);
+    const validPages = filterDeletedPages(recentPages, deletedData);
 
     // Populate the dropdown with the valid pages
     populateDropdown(validPages);
