@@ -23,7 +23,7 @@ function handleFormSubmission() {
     document.getElementById('googleForm').addEventListener('submit', function (event) {
         event.preventDefault();
         
-        const formId = document.getElementById(config.formIdField).value.trim();
+        const formId = document.getElementById(config.creationFormId).value.trim();
         if (!formId) {
             alert("Please provide a valid Google Form ID.");
             return;
