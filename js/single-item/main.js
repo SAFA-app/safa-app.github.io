@@ -55,24 +55,11 @@ function renderPage(page) {
     contentElement.innerHTML = page.content;
     contentContainer.appendChild(contentElement);
 
-    // Optionally, add more fields here (e.g., category, timestamp)
-    if (page.category) {
-        const categoryElement = document.createElement('p');
-        categoryElement.textContent = `Category: ${page.category}`;
-        contentContainer.appendChild(categoryElement);
-    }
-
-    if (page.timestamp) {
-        const timestampElement = document.createElement('p');
-        timestampElement.textContent = `Published on: ${page.timestamp}`;
-        contentContainer.appendChild(timestampElement);
-    }
-
     // Add an external link button if the external_link is not empty
     if (page.external_link) {
         const externalLinkButton = document.createElement('a');
         externalLinkButton.href = page.external_link;
-        externalLinkButton.textContent = 'Visit External Link';
+        externalLinkButton.textContent = 'Link';
         externalLinkButton.target = '_blank'; // Open the link in a new tab
         externalLinkButton.classList.add('external-link-button'); // Optionally add a CSS class
         contentContainer.appendChild(externalLinkButton);
