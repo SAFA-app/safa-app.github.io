@@ -9,13 +9,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Filter pages based on the parentId or show rows with empty parent field
     const filteredPages = validPages.filter(page => {
         if (parentId) {
-            // If parentId is provided, show only rows where the 'id' matches the parent
-            return page.id === parentId;
+            // If parentId is provided, show only rows where the 'parent' field matches the parentId
+            return page.parent === parentId;
         } else {
-            // If no parentId, show rows where 'parent' field is empty
+            // If no parentId is provided, show only rows where the 'parent' field is empty (i.e., top-level pages)
             return page.parent === "";
         }
     });
+    
     
     // Populate the list with filtered pages
     const itemsListContainer = document.getElementById('items-list-container');
