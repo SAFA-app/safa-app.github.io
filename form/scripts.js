@@ -70,7 +70,7 @@ function handleFormSubmission() {
 
 // Fetch and process data from Google Sheets
 async function fetchData() {
-    const googleSheetsUrl = "https://docs.google.com/spreadsheets/d/1XL-g0mTwrsdM1oTYs4rHNklgjrbSlB_fAJ7YgFGDJxg/gviz/tq?tqx=out:json";
+    const googleSheetsUrl = "https://docs.google.com/spreadsheets/d/1ZuUVyBmIU_Ax5V7Iq-yCUQvN-tmF8RZEh1uhkT6HVFA/gviz/tq?tqx=out:json";
     
     try {
         const response = await fetch(googleSheetsUrl);
