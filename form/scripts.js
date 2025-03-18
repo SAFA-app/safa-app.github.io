@@ -1,4 +1,19 @@
-// Initialize TinyMCE editor
+// Configuration object for form entries
+const config = {
+    formIdField: "formId",
+    idField: "entry.1896761587",
+    titleField: "entry.1425210652",
+    subtitleField: "entry.1123697200",
+    contentField: "entry.421337030",
+    imageField: "entry.377306596",
+    colourField: "entry.235505769",
+    externalLinkField: "entry.457303743",
+    deletedField: "entry.1153953166",
+    customPageField: "entry.2143033031",
+    parentField: "entry.53127251",
+};
+
+// Initialize TinyMCE editor function
 function initTinyMCE() {
     tinymce.init({
         selector: '#content',
@@ -18,40 +33,37 @@ function generateId() {
 function handleFormSubmission() {
     document.getElementById('googleForm').addEventListener('submit', function (event) {
         event.preventDefault();
-
-        const formId = document.getElementById('formId').value.trim();
-
+        
+        const formId = document.getElementById(config.formIdField).value.trim();
         if (!formId) {
             alert("Please provide a valid Google Form ID.");
             return;
         }
-
+        
         const formUrl = `https://docs.google.com/forms/d/e/${formId}/formResponse`;
-
         const formData = new FormData();
-        formData.append("entry.1896761587", document.getElementById('id').value);
-        formData.append("entry.1425210652", document.getElementById('title').value);
-        formData.append("entry.1123697200", document.getElementById('subtitle').value);
-        formData.append("entry.421337030", tinymce.get('content').getContent().trim());
-        formData.append("entry.377306596", document.getElementById('image').value);
-        formData.append("entry.235505769", document.getElementById('colour').value);
-        formData.append("entry.457303743", document.getElementById('externalLink').value);
-        formData.append("entry.1153953166", ""); // Empty "deleted" field
-        formData.append("entry.2143033031", document.getElementById('customPage').value);
-        formData.append("entry.53127251", document.getElementById('parent').value);
-
-        fetch(formUrl, {
-            method: "POST",
-            body: formData,
-            mode: "no-cors"
-        }).then(() => {
-            alert("Form submitted successfully!");
-            document.getElementById('googleForm').reset();
-            tinymce.get('content').setContent('');
-            document.getElementById('id').value = generateId();
-        }).catch(error => {
-            alert("Error submitting form: " + error);
-        });
+        
+        formData.append(config.idField, document.getElementById('id').value);
+        formData.append(config.titleField, document.getElementById('title').value);
+        formData.append(config.subtitleField, document.getElementById('subtitle').value);
+        formData.append(config.contentField, tinymce.get('content').getContent().trim());
+        formData.append(config.imageField, document.getElementById('image').value);
+        formData.append(config.colourField, document.getElementById('colour').value);
+        formData.append(config.externalLinkField, document.getElementById('externalLink').value);
+        formData.append(config.deletedField, ""); // Empty "deleted" field
+        formData.append(config.customPageField, document.getElementById('customPage').value);
+        formData.append(config.parentField, document.getElementById('parent').value);
+        
+        fetch(formUrl, { method: "POST", body: formData, mode: "no-cors" })
+            .then(() => {
+                alert("Form submitted successfully!");
+                document.getElementById('googleForm').reset();
+                tinymce.get('content').setContent('');
+                document.getElementById('id').value = generateId();
+            })
+            .catch(error => {
+                alert("Error submitting form: " + error);
+            });
     });
 }
 
@@ -62,10 +74,8 @@ async function fetchData() {
     try {
         const response = await fetch(googleSheetsUrl);
         const text = await response.text();
-
         const jsonText = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\)/)[1];
         const jsonData = JSON.parse(jsonText);
-
         processParentOptions(jsonData);
     } catch (error) {
         console.error("Error fetching Google Sheets data:", error);
@@ -79,7 +89,6 @@ function processParentOptions(data) {
     const titleIndex = columns.indexOf("title");
     const deletedIndex = columns.indexOf("deleted");
     const timestampIndex = columns.indexOf("Informazioni cronologiche");
-
     const idMap = new Map();
 
     data.table.rows.forEach(row => {
@@ -130,7 +139,11 @@ function handleCustomPageSelection() {
     document.getElementById("customPage").addEventListener("change", function () {
         const isCustomPage = this.value === "true";
         const fieldsToDisable = [
-            "subtitle", "content", "image", "colour", "externalLink"
+            "subtitle",
+            "content",
+            "image",
+            "colour",
+            "externalLink"
         ];
 
         fieldsToDisable.forEach(fieldId => {
