@@ -1,4 +1,5 @@
 // Configuration object for form entries
+//when you change google form, just change the entry numbers (the formID is asked to the user)
 const config = {
     formIdField: "formId",
     idField: "entry.1896761587",
@@ -8,9 +9,9 @@ const config = {
     imageField: "entry.377306596",
     colourField: "entry.235505769",
     externalLinkField: "entry.457303743",
-    deletedField: "entry.1153953166",
     customPageField: "entry.2143033031",
     parentField: "entry.53127251",
+    categoryField: "entry.1718811362"
 };
 
 // Initialize TinyMCE editor function
@@ -50,9 +51,9 @@ function handleFormSubmission() {
         formData.append(config.imageField, document.getElementById('image').value);
         formData.append(config.colourField, document.getElementById('colour').value);
         formData.append(config.externalLinkField, document.getElementById('externalLink').value);
-        formData.append(config.deletedField, ""); // Empty "deleted" field
         formData.append(config.customPageField, document.getElementById('customPage').value);
         formData.append(config.parentField, document.getElementById('parent').value);
+        formData.append(config.categoryField, document.getElementById('category').value);
         
         fetch(formUrl, { method: "POST", body: formData, mode: "no-cors" })
             .then(() => {
