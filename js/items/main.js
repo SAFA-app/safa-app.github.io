@@ -22,13 +22,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     itemsListContainer.innerHTML = ''; // Clear any existing content
 
     filteredPages.forEach(page => {
-        const itemElement = createListItem(page);
+        const itemElement = createListItem(page, validPages); // Pass validPages here
         itemsListContainer.appendChild(itemElement);
     });
 });
 
 // Function to create the list item element
-function createListItem(page) {
+function createListItem(page, validPages) {
     const itemDiv = document.createElement('div');
     itemDiv.classList.add('list-item');
     itemDiv.style.cursor = 'pointer';
@@ -50,7 +50,7 @@ function createListItem(page) {
     // Add click event listener to the item
     itemDiv.addEventListener('click', () => {
         // Check if the clicked item has children by looking for other rows with this 'id' as the parent
-        const hasChildren = isParentForOtherRows(page.id);
+        const hasChildren = isParentForOtherRows(page.id, validPages); // Pass validPages here
         if (hasChildren) {
             // If there are child items, reload the same page with 'parent' set to this item's 'id'
             window.location.href = `items.html?parent=${page.id}`;
@@ -64,6 +64,6 @@ function createListItem(page) {
 }
 
 // Function to check if the page has children (rows with this 'id' in the 'parent' field)
-function isParentForOtherRows(parentId) {
+function isParentForOtherRows(parentId, validPages) {
     return validPages.some(page => page.parent === parentId);
 }
