@@ -38,11 +38,12 @@ async function fetchValidPages() {
         keys.forEach(key => {
             if (key !== 'id') { // Skip 'id' if not needed
                 const cell = row.insertCell();
-                cell.textContent = page[key]; // Fill the cell with the value from the valid page
+                cell.textContent = String(page[key]); // Explicitly convert each value to string
             }
         });
     });
 }
+
 
 export async function deletePage() {
     const formId = document.getElementById('deletionFormId').value.trim();
