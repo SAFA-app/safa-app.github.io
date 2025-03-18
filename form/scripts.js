@@ -11,7 +11,8 @@ const config = {
     externalLinkField: "entry.457303743",
     customPageField: "entry.2143033031",
     parentField: "entry.53127251",
-    categoryField: "entry.1718811362"
+    categoryField: "entry.1718811362",
+    googleSheetsUrl: "https://docs.google.com/spreadsheets/d/1ZuUVyBmIU_Ax5V7Iq-yCUQvN-tmF8RZEh1uhkT6HVFA/gviz/tq?tqx=out:json"
 };
 
 // Initialize TinyMCE editor function
@@ -68,9 +69,10 @@ function handleFormSubmission() {
     });
 }
 
+
 // Fetch and process data from Google Sheets
 async function fetchData() {
-    const googleSheetsUrl = "https://docs.google.com/spreadsheets/d/1ZuUVyBmIU_Ax5V7Iq-yCUQvN-tmF8RZEh1uhkT6HVFA/gviz/tq?tqx=out:json";
+    const googleSheetsUrl = config.googleSheetsUrl; // Use the URL from the config
     
     try {
         const response = await fetch(googleSheetsUrl);
