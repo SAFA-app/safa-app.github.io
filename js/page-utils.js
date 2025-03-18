@@ -3,29 +3,18 @@ import config from './config.js';  // Import config for URLs
 // Function to fetch CSV data and parse it
 export async function fetchCSVData(url) {
     try {
-        // First, try to fetch data from the cache (stale)
-        const cachedResponse = await caches.match(url);
-        if (cachedResponse) {
-            const csvText = await cachedResponse.text();
-            // Fetch new data in the background while serving stale data
-            fetchAndCacheNewData(url);
-            return Papa.parse(csvText, { header: true, skipEmptyLines: true }).data;
-        }
-
-        // If no cached data is found, fetch from the network (fallback)
+        // Fetch the data from the network
         const response = await fetch(url);
         const csvText = await response.text();
 
-        // Cache the new response for future use
-        const cache = await caches.open('pwa-cache-v1');
-        cache.put(url, response.clone());
-
+        // Parse the CSV data
         return Papa.parse(csvText, { header: true, skipEmptyLines: true }).data;
     } catch (error) {
         console.error("Error fetching CSV data:", error);
         return [];
     }
 }
+
 
 // Helper function to fetch and cache new data in the background
 async function fetchAndCacheNewData(url) {
