@@ -57,3 +57,18 @@ tr:hover {
     font-size: 16px;
     font-weight: bold;
 }
+
+.external-link-button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-top: 20px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.external-link-button:hover {
+    background-color: #0056b3;
+}
