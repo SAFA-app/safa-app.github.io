@@ -1,6 +1,6 @@
 // config.js
 const config = {
-    formIdField: "formId",
+    creationFormId: "creationFormId",
     idField: "entry.1896761587",
     titleField: "entry.1425210652",
     subtitleField: "entry.1123697200",

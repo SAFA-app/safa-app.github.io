@@ -25,12 +25,13 @@ async function fetchValidPages() {
     validPages.forEach(page => {
         const row = tableBody.insertRow();
         
-        // Create a 'Select' checkbox
+        // Create a 'Select' radio button
         const selectCell = row.insertCell(0);
-        const selectCheckbox = document.createElement('input');
-        selectCheckbox.type = 'checkbox';
-        selectCheckbox.dataset.id = page.id;
-        selectCell.appendChild(selectCheckbox);
+        const selectRadio = document.createElement('input');
+        selectRadio.type = 'radio';
+        selectRadio.name = 'selectPage'; // Make sure all radio buttons have the same name
+        selectRadio.dataset.id = page.id;
+        selectCell.appendChild(selectRadio);
 
         // Populate the row with dynamic data based on the page object
         keys.forEach(key => {
@@ -51,13 +52,13 @@ export async function deletePage() {
         return;
     }
 
-    const selectedRow = document.querySelector('input[type="checkbox"]:checked');
-    if (!selectedRow) {
+    const selectedRadio = document.querySelector('input[type="radio"]:checked');
+    if (!selectedRadio) {
         alert('Please select a page to delete');
         return;
     }
 
-    const selectedId = selectedRow.dataset.id;
+    const selectedId = selectedRadio.dataset.id;
     console.log('Selected Page ID:', selectedId); // Log the selected page ID
 
     // Construct the POST request to the Google Form
@@ -75,7 +76,7 @@ export async function deletePage() {
         // Since no-cors mode doesn't allow you to inspect the response, we cannot check response.ok.
         // We'll rely on form submission behavior.
         alert(`Page with ID ${selectedId} deleted successfully!`);
-        selectedRow.closest('tr').remove(); // Optionally remove the row from the table
+        selectedRadio.closest('tr').remove(); // Optionally remove the row from the table
     } catch (error) {
         console.error('Error submitting form:', error);
         alert('Error deleting page: ' + error.message); // Show the error message in the alert
