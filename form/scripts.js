@@ -12,7 +12,8 @@ const config = {
     customPageField: "entry.2143033031",
     parentField: "entry.53127251",
     categoryField: "entry.1718811362",
-    googleSheetsUrl: "https://docs.google.com/spreadsheets/d/1ZuUVyBmIU_Ax5V7Iq-yCUQvN-tmF8RZEh1uhkT6HVFA/gviz/tq?tqx=out:json"
+    pagesTable: "https://docs.google.com/spreadsheets/d/1ZuUVyBmIU_Ax5V7Iq-yCUQvN-tmF8RZEh1uhkT6HVFA/gviz/tq?tqx=out:json",
+    deletedTable: "https://docs.google.com/spreadsheets/d/1FVN90zGMNJbKOiBJWCVdVH7UFI74yny4G-3vJBzwrEo/gviz/tq?tqx=out:json"
 };
 
 // Initialize TinyMCE editor function
@@ -72,10 +73,10 @@ function handleFormSubmission() {
 
 // Fetch and process data from Google Sheets
 async function fetchData() {
-    const googleSheetsUrl = config.googleSheetsUrl; // Use the URL from the config
+    const pagesTable = config.pagesTable; // Use the URL from the config
     
     try {
-        const response = await fetch(googleSheetsUrl);
+        const response = await fetch(pagesTable);
         const text = await response.text();
         const jsonText = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\)/)[1];
         const jsonData = JSON.parse(jsonText);
