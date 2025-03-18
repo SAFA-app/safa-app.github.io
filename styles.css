@@ -35,7 +35,7 @@ tr:hover {
 .list-item {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     padding: 5px;
     border: 1px solid #ccc;
     border-radius: 8px;
@@ -54,7 +54,7 @@ tr:hover {
 }
 
 .item-title {
-    font-size: 12px;
+    font-size: 14px;
     font-weight: bold;
 }
 
