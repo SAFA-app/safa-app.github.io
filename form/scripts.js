@@ -1,5 +1,4 @@
 // Configuration object for form entries
-//when you change google form, just change the entry numbers (the formID is asked to the user)
 const config = {
     formIdField: "formId",
     idField: "entry.1896761587",
@@ -70,74 +69,6 @@ function handleFormSubmission() {
     });
 }
 
-
-// Fetch and process data from Google Sheets
-async function fetchData() {
-    const pagesTable = config.pagesTable; // Use the URL from the config
-    
-    try {
-        const response = await fetch(pagesTable);
-        const text = await response.text();
-        const jsonText = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\)/)[1];
-        const jsonData = JSON.parse(jsonText);
-        processParentOptions(jsonData);
-    } catch (error) {
-        console.error("Error fetching Google Sheets data:", error);
-    }
-}
-
-// Process parent options from the fetched data
-function processParentOptions(data) {
-    const columns = data.table.cols.map(col => col.label);
-    const idIndex = columns.indexOf("ID");
-    const titleIndex = columns.indexOf("title");
-    const deletedIndex = columns.indexOf("deleted");
-    const timestampIndex = columns.indexOf("Informazioni cronologiche");
-    const idMap = new Map();
-
-    data.table.rows.forEach(row => {
-        const cells = row.c;
-        const id = cells[idIndex]?.v;
-        const title = cells[titleIndex]?.v;
-        const deleted = cells[deletedIndex]?.v === "true";
-        const timestamp = cells[timestampIndex]?.f;
-
-        if (!id || !title || deleted) return;
-
-        if (!idMap.has(id) || isNewer(timestamp, idMap.get(id).timestamp)) {
-            idMap.set(id, { title, timestamp });
-        }
-    });
-
-    populateDropdown([...idMap.entries()]);
-}
-
-// Check if a new timestamp is newer than an existing one
-function isNewer(newTimestamp, oldTimestamp) {
-    return parseTimestamp(newTimestamp) > parseTimestamp(oldTimestamp);
-}
-
-// Parse a timestamp string to a Date object
-function parseTimestamp(timestamp) {
-    const [date, time] = timestamp.split(" ");
-    const [day, month, year] = date.split("/").map(Number);
-    const [hours, minutes, seconds] = time.split(".").map(Number);
-    return new Date(year, month - 1, day, hours, minutes, seconds).getTime();
-}
-
-// Populate the parent dropdown
-function populateDropdown(idList) {
-    const parentSelect = document.getElementById("parent");
-    parentSelect.innerHTML = '<option value="">Select Parent</option>';
-
-    idList.forEach(([id, { title }]) => {
-        const option = document.createElement("option");
-        option.value = id;
-        option.textContent = title;
-        parentSelect.appendChild(option);
-    });
-}
-
 // Handle the custom page selection
 function handleCustomPageSelection() {
     document.getElementById("customPage").addEventListener("change", function () {
@@ -172,11 +103,115 @@ function handleCustomPageSelection() {
     document.getElementById("customPage").dispatchEvent(new Event("change"));
 }
 
+// Fetch and process data from Google Sheets
+async function fetchData(url) {
+    try {
+        const response = await fetch(url);
+        const text = await response.text();
+        const jsonText = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\)/)[1];
+        return JSON.parse(jsonText);
+    } catch (error) {
+        console.error("Error fetching Google Sheets data:", error);
+        return null;
+    }
+}
+
+// Filter out the most recent version of each webpage based on 'Informazioni cronologiche'
+function filterMostRecentPages(data) {
+    if (!data || !data.table || !data.table.cols) {
+        console.error("Invalid data format:", data);
+        return [];
+    }
+
+    const columns = data.table.cols.map(col => col.label); // Extract column labels
+    const idIndex = columns.indexOf("ID");
+    const titleIndex = columns.indexOf("title");
+    const timestampIndex = columns.indexOf("Informazioni cronologiche");
+
+    if (idIndex === -1 || titleIndex === -1 || timestampIndex === -1) {
+        console.error("Required columns (ID, title, Informazioni cronologiche) not found.");
+        return [];
+    }
+
+    const idMap = new Map();
+
+    data.table.rows.forEach(row => {
+        const cells = row.c;
+        const id = cells[idIndex]?.v;
+        const title = cells[titleIndex]?.v;
+        const timestamp = cells[timestampIndex]?.f;
+
+        if (!id || !title || !timestamp) return;
+
+        // If a page with this ID exists, keep the most recent version
+        if (!idMap.has(id) || isNewer(timestamp, idMap.get(id).timestamp)) {
+            idMap.set(id, { title, id, timestamp });
+        }
+    });
+
+    return Array.from(idMap.values());
+}
+
+
+// Filter out pages that are in the deletedTable
+function filterDeletedPages(pages, deletedTable) {
+    const deletedIds = new Set(deletedTable.map(row => row.ID)); // Create a Set of deleted IDs
+
+    return pages.filter(page => !deletedIds.has(page.id));
+}
+
+// Check if a new timestamp is newer than an existing one
+function isNewer(newTimestamp, oldTimestamp) {
+    return parseTimestamp(newTimestamp) > parseTimestamp(oldTimestamp);
+}
+
+// Parse a timestamp string to a Date object
+function parseTimestamp(timestamp) {
+    const [date, time] = timestamp.split(" ");
+    const [day, month, year] = date.split("/").map(Number);
+    const [hours, minutes, seconds] = time.split(".").map(Number);
+    return new Date(year, month - 1, day, hours, minutes, seconds).getTime();
+}
+
+// Populate the parent dropdown with filtered pages
+function populateDropdown(pages) {
+    const parentSelect = document.getElementById("parent");
+    parentSelect.innerHTML = '<option value="">Select Parent</option>';
+
+    pages.forEach(page => {
+        const option = document.createElement("option");
+        option.value = page.id;
+        option.textContent = page.title;
+        parentSelect.appendChild(option);
+    });
+}
+
+// Main function to initialize the dropdown with pages data
+async function initializeDropdown() {
+    // Fetch pages and deleted pages data
+    const pagesData = await fetchData(config.pagesTable);
+    const deletedData = await fetchData(config.deletedTable);
+
+    if (!pagesData || !deletedData) {
+        console.error("Failed to fetch data.");
+        return;
+    }
+
+    // Filter pages to get only the most recent version of each page
+    const recentPages = filterMostRecentPages(pagesData);
+
+    // Filter out deleted pages
+    const validPages = filterDeletedPages(recentPages, deletedData.table.rows);
+
+    // Populate the dropdown with the valid pages
+    populateDropdown(validPages);
+}
+
 // Initialize all functions
 document.addEventListener("DOMContentLoaded", function () {
     initTinyMCE();
     document.getElementById('id').value = generateId();
     handleFormSubmission();
-    fetchData();
     handleCustomPageSelection();
+    initializeDropdown();  // Initialize the dropdown after the page loads
 });
