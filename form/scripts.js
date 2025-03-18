@@ -128,7 +128,8 @@ function filterMostRecentPages(data) {
 
         // If a page with this ID exists, keep the most recent version
         if (!idMap.has(id) || isNewer(timestamp, idMap.get(id).timestamp)) {
-            idMap.set(id, { title, id, timestamp });
+            // Store the entire row, not just specific fields
+            idMap.set(id, { ...row, title, id, timestamp });
         }
     });
 
@@ -185,9 +186,13 @@ async function initializeDropdown() {
     // Filter out deleted pages
     const validPages = filterDeletedPages(recentPages, deletedData);
 
+    // Log the valid pages table with all original fields to the console
+    console.log("Valid Pages Table with Original Fields:", validPages);
+
     // Populate the dropdown with the valid pages
     populateDropdown(validPages);
 }
+
 
 // Initialize all functions
 document.addEventListener("DOMContentLoaded", function () {
