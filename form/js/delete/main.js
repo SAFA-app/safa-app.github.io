@@ -1,3 +1,4 @@
+import config from '../config.js';  // Import configuration file
 import { getValidPages } from '../page-utils.js'; // Import utility function to fetch valid pages
 
 async function fetchValidPages() {
@@ -64,7 +65,9 @@ export async function deletePage() {
     // Construct the POST request to the Google Form
     const formUrl = `https://docs.google.com/forms/d/e/${formId}/formResponse`;
     const formData = new FormData();
-    formData.append('entry.1372900842', selectedId); // Field ID for entry identifier
+    
+    // Use the entry ID from the config
+    formData.append(config.deletionEntryId, selectedId); // Dynamically get the entry ID
 
     try {
         const response = await fetch(formUrl, {

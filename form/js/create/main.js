@@ -1,4 +1,3 @@
-// main.js
 import config from '../config.js';  // Import configuration file
 import { getValidPages } from '../page-utils.js';  // Import utility function to fetch valid pages
 
