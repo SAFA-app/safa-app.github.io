@@ -55,13 +55,15 @@ function renderPage(page) {
     contentElement.innerHTML = page.content;
     contentContainer.appendChild(contentElement);
 
-    // Add an external link button if the external_link is not empty
-    if (page.external_link) {
-        const externalLinkButton = document.createElement('a');
-        externalLinkButton.href = page.external_link;
-        externalLinkButton.textContent = 'Link';
-        externalLinkButton.target = '_blank'; // Open the link in a new tab
-        externalLinkButton.classList.add('external-link-button'); // Optionally add a CSS class
-        contentContainer.appendChild(externalLinkButton);
-    }
+// Add an external link button if the external_link is not empty
+if (page.external_link) {
+    const externalLinkButton = document.createElement('button');
+    externalLinkButton.textContent = 'Link';
+    // Set up the button's click event to open the link in a new tab
+    externalLinkButton.addEventListener('click', () => {
+        window.open(page.external_link, '_blank'); // Open the link in a new tab
+    });
+    contentContainer.appendChild(externalLinkButton);
+}
+
 }
