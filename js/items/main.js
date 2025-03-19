@@ -1,4 +1,4 @@
-import { getValidPages } from '../page-utils.js'; // Import utility function to fetch valid pages
+import { getValidPages } from '/js/page-utils.js'; // Import utility function to fetch valid pages
 
 document.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);

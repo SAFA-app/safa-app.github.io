@@ -1,4 +1,4 @@
-import { getValidPages } from '../page-utils.js'; // Import the utility function
+import { getValidPages } from '/js/page-utils.js'; // Import the utility function
 
 // This function will run when the DOM is ready
 document.addEventListener('DOMContentLoaded', async function() {

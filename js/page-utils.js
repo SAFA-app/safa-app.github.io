@@ -1,4 +1,4 @@
-import config from './config.js';  // Import config for URLs
+import config from '/js/config.js';  // Import config for URLs
 
 // Function to fetch CSV data and parse it
 export async function fetchCSVData(url) {

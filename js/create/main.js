@@ -1,5 +1,5 @@
-import config from '../config.js';  // Import configuration file
-import { getValidPages } from '../page-utils.js';  // Import utility function to fetch valid pages
+import config from '/js/config.js';  // Import configuration file
+import { getValidPages } from '/js/page-utils.js';  // Import utility function to fetch valid pages
   
 
 // Initialize TinyMCE editor function
