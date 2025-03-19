@@ -1,7 +1,8 @@
 /* Global styles */
 * {
     box-sizing: border-box;
-    font-family: 'Arial', sans-serif;
+    font-family: 'Arial', 'Helvetica Neue', Helvetica, sans-serif;
+
 }
 
 body {
@@ -74,7 +75,7 @@ main {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;  /* Ensures image scales without distortion */
-    width: auto;  /* Maintains aspect ratio */
+    width: 100%;  /* Maintains aspect ratio */
     height: auto;  /* Maintains aspect ratio */
 }
 
@@ -99,9 +100,6 @@ button {
     object-fit: contain;
     /* Ensure the image scales nicely */
 }
-
-
-
 
 
 button:hover {
