@@ -16,20 +16,6 @@ export async function fetchCSVData(url) {
 }
 
 
-// Helper function to fetch and cache new data in the background
-async function fetchAndCacheNewData(url) {
-    try {
-        const response = await fetch(url);
-        const csvText = await response.text();
-
-        const cache = await caches.open('pwa-cache-v1');
-        cache.put(url, new Response(csvText));  // Store the fresh data
-    } catch (error) {
-        console.error("Error fetching and caching new data:", error);
-    }
-}
-
-
 
 // Filter out the most recent version of each webpage based on 'Informazioni cronologiche'
 export function filterMostRecentPages(data) {
