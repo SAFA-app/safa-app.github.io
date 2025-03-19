@@ -1,39 +1,33 @@
 import config from './config.js';  // Import config for URLs
 
 // Function to fetch CSV data and parse it
-export async function fetchCSVData(url, useLocalStorage = true) {
-    const localStorageKey = `csvData_${url}`; // Unique key based on URL
-
-    // Check if we should fetch from localStorage
-    if (useLocalStorage) {
-        const cachedData = localStorage.getItem(localStorageKey);
-
-        // If data exists in localStorage, parse and return it
-        if (cachedData) {
-            console.log("Using cached data from localStorage");
-            return JSON.parse(cachedData);
-        }
-    }
-
-    // If data is not in localStorage or we want to fetch from network
+export async function fetchCSVData(url) {
     try {
         // Fetch the data from the network
         const response = await fetch(url);
         const csvText = await response.text();
 
         // Parse the CSV data
-        const parsedData = Papa.parse(csvText, { header: true, skipEmptyLines: true }).data;
-
-        // Store the parsed data in localStorage
-        localStorage.setItem(localStorageKey, JSON.stringify(parsedData));
-
-        return parsedData;
+        return Papa.parse(csvText, { header: true, skipEmptyLines: true }).data;
     } catch (error) {
         console.error("Error fetching CSV data:", error);
         return [];
     }
 }
 
+
+// Helper function to fetch and cache new data in the background
+async function fetchAndCacheNewData(url) {
+    try {
+        const response = await fetch(url);
+        const csvText = await response.text();
+
+        const cache = await caches.open('pwa-cache-v1');
+        cache.put(url, new Response(csvText));  // Store the fresh data
+    } catch (error) {
+        console.error("Error fetching and caching new data:", error);
+    }
+}
 
 
 
