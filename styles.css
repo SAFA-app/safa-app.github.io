@@ -1,3 +1,97 @@
+/* Global styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background-color: #f8f9fa;
+    color: #333;
+    line-height: 1.6;
+    font-size: 16px;
+    padding: 20px;
+    margin: 0;
+    width: 100%;
+}
+
+main {
+    margin: 20px 0;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Media Queries for responsiveness */
+@media (max-width: 768px) {
+    body {
+        padding: 10px; /* Reduced padding for mobile */
+    }
+
+    main {
+        margin: 10px 0;
+        padding: 15px; /* Reduced padding for smaller screens */
+    }
+
+    /* Optional: Adjust font size for mobile */
+    body {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    main {
+        margin: 5px 0;
+        padding: 10px; /* Even smaller padding */
+    }
+
+    body {
+        font-size: 13px; /* Further reduce font size for very small screens */
+    }
+}
+
+
+
+/* Basic page container */
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+
+
+/* Links styling */
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Buttons - consistent button styles */
+button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+
+
 .wysiwyg-editor-container {
     margin: 0 auto;
 }
@@ -56,20 +150,4 @@ tr:hover {
     font-size: 14px;
     font-weight: bold;
 }
-
-button {
-    display: inline-block;
-    padding: 10px 20px;
-    margin-top: 20px;
-    background-color: #007bff;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    text-align: center;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
-
 
