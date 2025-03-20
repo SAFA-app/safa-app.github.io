@@ -91,7 +91,7 @@ function handleCustomPageSelection() {
 
 // Populate the parent dropdown with filtered pages
 async function populateDropdown() {
-    const validPages = await getValidPages();
+    const validPages = await getValidPages(true);
 
     const parentSelect = document.getElementById("parent");
     parentSelect.innerHTML = '<option value="">Select Parent</option>';
@@ -133,7 +133,7 @@ async function updateForm() {
     }
 
     try {
-        const validPages = await getValidPages();  // Assuming getValidPages is an async function that returns a promise
+        const validPages = await getValidPages(true);  // Assuming getValidPages is an async function that returns a promise
         const pageData = validPages.find(page => page.ID === id);
 
         if (pageData) {

@@ -2,7 +2,7 @@ import config from '/js/config.js';
 import { getValidPages } from '/js/page-utils.js';
 
 async function fetchValidPages() {
-    const validPages = await getValidPages();
+    const validPages = await getValidPages(true);
     console.log(validPages);
     const tableBody = document.getElementById('pagesTable').getElementsByTagName('tbody')[0];
     const tableHeader = document.getElementById('pagesTable').getElementsByTagName('thead')[0].getElementsByTagName('tr')[0];
