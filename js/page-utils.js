@@ -1,13 +1,12 @@
 import config from '/js/config.js';  // Import config for URLs
 
+const LOCAL_STORAGE_KEY = 'validPages'; // Centralize local storage key
+
 // Function to fetch CSV data and parse it
 export async function fetchCSVData(url) {
     try {
-        // Fetch the data from the network
         const response = await fetch(url);
         const csvText = await response.text();
-
-        // Parse the CSV data
         return Papa.parse(csvText, { header: true, skipEmptyLines: true }).data;
     } catch (error) {
         console.error("Error fetching CSV data:", error);
@@ -15,33 +14,24 @@ export async function fetchCSVData(url) {
     }
 }
 
-
-
 // Filter out the most recent version of each webpage based on 'Informazioni cronologiche'
 export function filterMostRecentPages(data) {
     const idMap = new Map();
-
     data.forEach(row => {
         const id = row.ID;
         const title = row.title;
         const timestamp = row["Informazioni cronologiche"];
-
         if (!id || !title || !timestamp) return;
-
-        // If a page with this ID exists, keep the most recent version
         if (!idMap.has(id) || isNewer(timestamp, idMap.get(id).timestamp)) {
-            // Store the entire row, not just specific fields
             idMap.set(id, { ...row, title, id, timestamp });
         }
     });
-
     return Array.from(idMap.values());
 }
 
 // Filter out pages that are in the deletedTable
 export function filterDeletedPages(pages, deletedData) {
-    const deletedIds = new Set(deletedData.map(row => row.ID)); // Create a Set of deleted IDs
-
+    const deletedIds = new Set(deletedData.map(row => row.ID));
     return pages.filter(page => !deletedIds.has(page.id));
 }
 
@@ -59,23 +49,68 @@ function parseTimestamp(timestamp) {
 }
 
 // Main function to fetch valid pages (valid = most recent and not deleted)
-export async function getValidPages() {
-    const pagesData = await fetchCSVData(config.pagesTable);
-    const deletedData = await fetchCSVData(config.deletedTable);
+// Accepts an argument `forceFresh` to force fetching fresh data (if true), else it defaults to local storage.
+export async function getValidPages(forceFresh = false) {
+    try {
+        if (!forceFresh) {
+            const cachedPages = getPagesFromLocalStorage();
+            if (cachedPages) {
+                console.log("Pages fetched from local storage.");
+                return cachedPages;
+            }
+        }
 
-    if (!pagesData || !deletedData) {
-        console.error("Failed to fetch data.");
+        const pagesData = await fetchCSVData(config.pagesTable);
+        const deletedData = await fetchCSVData(config.deletedTable);
+        if (!pagesData || !deletedData) {
+            console.error("Failed to fetch data.");
+            return [];
+        }
+
+        const recentPages = filterMostRecentPages(pagesData);
+        const validPages = filterDeletedPages(recentPages, deletedData);
+
+        savePagesToLocalStorage(validPages);
+        console.log("Valid Pages Table with Original Fields:", validPages);
+
+        return validPages;
+    } catch (error) {
+        console.error("Error in getValidPages:", error);
         return [];
     }
+}
 
-    // Filter pages to get only the most recent version of each page
-    const recentPages = filterMostRecentPages(pagesData);
+// Save valid pages to localStorage
+function savePagesToLocalStorage(pages) {
+    try {
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(pages));
+        console.log("Valid pages saved to local storage.");
+    } catch (error) {
+        console.error("Error saving valid pages to local storage:", error);
+    }
+}
 
-    // Filter out deleted pages
-    const validPages = filterDeletedPages(recentPages, deletedData);
+// Retrieve valid pages from localStorage
+function getPagesFromLocalStorage() {
+    try {
+        const pages = localStorage.getItem(LOCAL_STORAGE_KEY);
+        if (pages) {
+            return JSON.parse(pages);
+        }
+        return null;
+    } catch (error) {
+        console.error("Error retrieving valid pages from local storage:", error);
+        return null;
+    }
+}
 
-    // Log the valid pages table with all original fields to the console
-    console.log("Valid Pages Table with Original Fields:", validPages);
-
-    return validPages;
+// Function to update the local storage with fresh data
+export async function updateLocalStorageWithFreshData() {
+    console.log("Updating local storage with fresh data...");
+    const freshData = await getValidPages(true);
+    if (freshData.length > 0) {
+        console.log("Local storage updated successfully!");
+    } else {
+        console.error("Failed to update local storage. No valid data found.");
+    }
 }
