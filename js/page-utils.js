@@ -107,10 +107,24 @@ function getPagesFromLocalStorage() {
 // Function to update the local storage with fresh data
 export async function updateLocalStorageWithFreshData() {
     console.log("Updating local storage with fresh data...");
-    const freshData = await getValidPages(true);
-    if (freshData.length > 0) {
-        console.log("Local storage updated successfully!");
-    } else {
-        console.error("Failed to update local storage. No valid data found.");
+
+    // Make sure `updateNotification` function is accessible (you can pass it as an argument if needed)
+    const notification = document.getElementById('notification'); // Get the notification div
+
+    try {
+        const freshData = await getValidPages(true); // Assuming this function is fetching fresh data
+
+        if (freshData.length > 0) {
+            console.log("Local storage updated successfully!");
+            notification.textContent = "Update completed successfully!"; // Success message
+        } else {
+            console.error("Failed to update local storage. No valid data found.");
+            notification.textContent = "Failed to update local storage. No valid data found."; // Failure message
+        }
+    } catch (error) {
+        console.error("Error while updating local storage:", error);
+        notification.textContent = "An error occurred while updating the data."; // Error message
     }
 }
+
+
