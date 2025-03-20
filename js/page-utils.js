@@ -128,3 +128,29 @@ export async function updateLocalStorageWithFreshData() {
 }
 
 
+// Function to download the valid pages as CSV
+export async function downloadValidPagesCSV() {
+    try {
+        const validPages = await getValidPages(true);  // Fetch fresh valid pages
+        
+        if (validPages.length === 0) {
+            console.error("No valid pages to download.");
+            return;
+        }
+
+        // Convert valid pages to CSV format using PapaParse
+        const csv = Papa.unparse(validPages);
+        
+        // Create a temporary anchor element to trigger the download
+        const downloadLink = document.createElement('a');
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        downloadLink.href = URL.createObjectURL(blob);
+        downloadLink.download = 'valid_pages.csv'; // Set the filename
+        document.body.appendChild(downloadLink);  // Append the anchor to the body
+        downloadLink.click();  // Trigger the download
+        document.body.removeChild(downloadLink);  // Remove the anchor after download
+        console.log("Download initiated.");
+    } catch (error) {
+        console.error("Error downloading valid pages CSV:", error);
+    }
+}

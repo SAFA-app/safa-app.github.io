@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script type="module" src="/js/page-utils.js"></script>
     <title>Admin</title>
 </head>
 <body>
@@ -12,7 +14,14 @@
         <ul>
             <li><a href="/pages/create-page.html" id="createPageLink">Create New Page</a></li>
             <li><a href="/pages/manage-page.html" id="managePageLink">Manage Existing Pages</a></li>
-        </ul>
+            <li><a href="javascript:void(0);" id="downloadLink">Download Valid Pages CSV</a></li>
     </div>
+
+    <script type="module">
+        import { downloadValidPagesCSV } from '/js/page-utils.js';  // Import the function
+    
+        // Add event listener to the download link
+        document.getElementById('downloadLink').addEventListener('click', downloadValidPagesCSV);
+    </script>
 </body>
 </html>
