@@ -21,16 +21,16 @@ function generateId() {
 function handleFormSubmission() {
     document.getElementById('googleForm').addEventListener('submit', function (event) {
         event.preventDefault();
-        
+
         const formId = document.getElementById(config.creationFormId).value.trim();
         if (!formId) {
             alert("Please provide a valid Google Form ID.");
             return;
         }
-        
+
         const formUrl = `https://docs.google.com/forms/d/e/${formId}/formResponse`;
         const formData = new FormData();
-        
+
         formData.append(config.idField, document.getElementById('id').value);
         formData.append(config.titleField, document.getElementById('title').value);
         formData.append(config.subtitleField, document.getElementById('subtitle').value);
@@ -41,12 +41,12 @@ function handleFormSubmission() {
         formData.append(config.customPageField, document.getElementById('customPage').value);
         formData.append(config.parentField, document.getElementById('parent').value);
         formData.append(config.categoryField, document.getElementById('category').value);
-        
+
         fetch(formUrl, { method: "POST", body: formData, mode: "no-cors" })
             .then(() => {
                 alert("Form submitted successfully!");
                 document.getElementById('googleForm').reset();
-                tinymce.get('content').setContent('');
+                clearEditorContent();
                 document.getElementById('id').value = generateId();
             })
             .catch(error => {
@@ -56,57 +56,15 @@ function handleFormSubmission() {
 }
 
 // General function to disable or enable fields based on a condition
-function toggleFieldsBasedOnCondition(triggerFieldId, condition, fieldsToToggle) {
+function toggleFields(triggerFieldId, condition, fieldsToToggle) {
     const triggerField = document.getElementById(triggerFieldId);
 
-    // Event listener for the condition field (triggerField)
     triggerField.addEventListener('change', function () {
-        const isConditionMet = condition(this.value);  // Check if the condition is met based on the field's value
-
+        const isConditionMet = condition(this.value);
         fieldsToToggle.forEach(fieldId => {
             const field = document.getElementById(fieldId);
             if (field) {
                 if (isConditionMet) {
-                    field.value = "";  // Clear the field's value
-                    field.setAttribute("disabled", "disabled");  // Disable the field
-                } else {
-                    field.removeAttribute("disabled");  // Enable the field
-                }
-            }
-        });
-
-        // Adjust TinyMCE editor based on the condition
-        const editor = tinymce.get("content");
-        if (editor) {
-            editor.setContent("");
-            if (isConditionMet) {
-                editor.mode.set("readonly");  // Make the editor readonly
-            } else {
-                editor.mode.set("design");  // Make the editor editable again
-            }
-        }
-    });
-
-    // Trigger the condition check immediately on page load
-    triggerField.dispatchEvent(new Event("change"));
-}
-
-// Handle the custom page selection
-function handleCustomPageSelection() {
-    document.getElementById("customPage").addEventListener("change", function () {
-        const isCustomPage = this.value === "true";
-        const fieldsToDisable = [
-            "subtitle",
-            "content",
-            "image",
-            "colour",
-            "externalLink"
-        ];
-
-        fieldsToDisable.forEach(fieldId => {
-            const field = document.getElementById(fieldId);
-            if (field) {
-                if (isCustomPage) {
                     field.value = "";
                     field.setAttribute("disabled", "disabled");
                 } else {
@@ -115,14 +73,26 @@ function handleCustomPageSelection() {
             }
         });
 
-        const editor = tinymce.get("content");
-        if (editor) {
-            editor.setContent("");
-            editor.mode.set(isCustomPage ? "readonly" : "design");
-        }
+        toggleEditorReadOnly(isConditionMet);
     });
 
-    document.getElementById("customPage").dispatchEvent(new Event("change"));
+    triggerField.dispatchEvent(new Event("change"));
+}
+
+function toggleEditorReadOnly(isReadOnly) {
+    const editor = tinymce.get("content");
+    if (editor) {
+        editor.setContent("");
+        editor.mode.set(isReadOnly ? "readonly" : "design");
+    }
+}
+
+// Function to clear TinyMCE editor content
+function clearEditorContent() {
+    const editor = tinymce.get("content");
+    if (editor) {
+        editor.setContent("");
+    }
 }
 
 // Populate the parent dropdown with filtered pages
@@ -148,32 +118,32 @@ function getURLParameter(name) {
 
 // Function to fill the form with the data
 function fillForm(data) {
-    document.getElementById('id').value = data.ID;  // Auto-fill the ID (readonly)
+    document.getElementById('id').value = data.ID;
     document.getElementById('title').value = data.title;
-    document.getElementById('subtitle').value = data.subtitle || '';  // Handle optional subtitle
-    tinymce.get('content').setContent(data.content || '');  // If you're using TinyMCE
-    document.getElementById('image').value = data.image_address || ''; 
+    document.getElementById('subtitle').value = data.subtitle || '';
+    tinymce.get('content').setContent(data.content || '');
+    document.getElementById('image').value = data.image_address || '';
     document.getElementById('externalLink').value = data.external_link || '';
-    document.getElementById('colour').value = data.colour || '#ffffff';  // Default to white if no color
+    document.getElementById('colour').value = data.colour || '#ffffff';
     document.getElementById('customPage').value = data.custom_page || 'false';
-    document.getElementById('parent').value = data.parent || '';  // Can be an empty string or specific parent ID
-    document.getElementById('category').value = data.category || 'category1';  // Default to category 1
+    document.getElementById('parent').value = data.parent || '';
+    document.getElementById('category').value = data.category || 'category1';
 }
 
 // Function to update the form based on the ID
 async function updateForm() {
-    const id = getURLParameter('id');  // Get the ID from the URL
+    const id = getURLParameter('id');
     if (!id) {
         console.error('No ID parameter found in the URL.');
         return;
     }
 
     try {
-        const validPages = await getValidPages(true);  // Assuming getValidPages is an async function that returns a promise
+        const validPages = await getValidPages(true);
         const pageData = validPages.find(page => page.ID === id);
 
         if (pageData) {
-            fillForm(pageData);  // Fill the form with the data from the matching page
+            fillForm(pageData);
         } else {
             console.error('No page found with the given ID.');
         }
@@ -188,17 +158,16 @@ document.addEventListener("DOMContentLoaded", function () {
     const idField = document.getElementById('id');
     idField.value = generateId();
     handleFormSubmission();
-    handleCustomPageSelection();
-    populateDropdown();  // Initialize the dropdown after the page loads
+    populateDropdown();
 
     // Handle the custom page selection: disable/enable fields based on custom page
-    toggleFieldsBasedOnCondition("customPage", (value) => value === "true", [
-        "subtitle", "content", "image", "colour", "externalLink"
+    toggleFields("customPage", (value) => value === "true", [
+        "subtitle", "content", "image", "externalLink"
     ]);
 
     // Handle the external link field: disable/enable fields based on external link input
-    toggleFieldsBasedOnCondition("externalLink", (value) => value.trim() !== "", [
-        "subtitle", "content", "image", "colour", "customPage", "parent", "category"
+    toggleFields("externalLink", (value) => value.trim() !== "", [
+        "subtitle", "content", "image", "customPage", "parent", "category"
     ]);
 
     if (window.location.search.includes('id=')) {
