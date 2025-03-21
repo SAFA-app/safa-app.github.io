@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-
     // Populate the list with filtered pages
     const itemsListContainer = document.getElementById('items-list-container');
     itemsListContainer.innerHTML = ''; // Clear any existing content
@@ -25,6 +24,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     filteredPages.forEach(page => {
         const itemElement = createListItem(page, validPages); // Pass validPages here
         itemsListContainer.appendChild(itemElement);
+    });
+
+    // Add functionality to the back button
+    const backButton = document.getElementById('back-button');
+    backButton.addEventListener('click', () => {
+        window.history.back(); // Simply navigate back in the browser's history
     });
 });
 
@@ -72,7 +77,6 @@ function createListItem(page, validPages) {
             }
         }
     });
-
 
     return itemDiv;
 }

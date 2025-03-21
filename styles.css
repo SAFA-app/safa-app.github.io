@@ -169,7 +169,7 @@ tr:hover {
     display: flex;
     flex-direction: column;
     padding: 15px; /* Added more padding for a cleaner look */
-    gap: 10px; /* Adds space between items */
+    gap: 7px; /* Adds space between items */
     background-color: #f8f9fa; /* Light background for the container */
     border-radius: 8px;
 }
