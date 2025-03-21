@@ -175,7 +175,6 @@ tr:hover {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s, transform 0.2s ease-in-out;
     overflow: hidden; /* Prevents content overflow */
-    white-space: nowrap; /* Prevents text from breaking into multiple lines */
     text-overflow: ellipsis; /* Adds "..." if the text overflows */
 }
 
