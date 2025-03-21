@@ -55,6 +55,42 @@ function handleFormSubmission() {
     });
 }
 
+// General function to disable or enable fields based on a condition
+function toggleFieldsBasedOnCondition(triggerFieldId, condition, fieldsToToggle) {
+    const triggerField = document.getElementById(triggerFieldId);
+
+    // Event listener for the condition field (triggerField)
+    triggerField.addEventListener('change', function () {
+        const isConditionMet = condition(this.value);  // Check if the condition is met based on the field's value
+
+        fieldsToToggle.forEach(fieldId => {
+            const field = document.getElementById(fieldId);
+            if (field) {
+                if (isConditionMet) {
+                    field.value = "";  // Clear the field's value
+                    field.setAttribute("disabled", "disabled");  // Disable the field
+                } else {
+                    field.removeAttribute("disabled");  // Enable the field
+                }
+            }
+        });
+
+        // Adjust TinyMCE editor based on the condition
+        const editor = tinymce.get("content");
+        if (editor) {
+            editor.setContent("");
+            if (isConditionMet) {
+                editor.mode.set("readonly");  // Make the editor readonly
+            } else {
+                editor.mode.set("design");  // Make the editor editable again
+            }
+        }
+    });
+
+    // Trigger the condition check immediately on page load
+    triggerField.dispatchEvent(new Event("change"));
+}
+
 // Handle the custom page selection
 function handleCustomPageSelection() {
     document.getElementById("customPage").addEventListener("change", function () {
@@ -154,6 +190,16 @@ document.addEventListener("DOMContentLoaded", function () {
     handleFormSubmission();
     handleCustomPageSelection();
     populateDropdown();  // Initialize the dropdown after the page loads
+
+    // Handle the custom page selection: disable/enable fields based on custom page
+    toggleFieldsBasedOnCondition("customPage", (value) => value === "true", [
+        "subtitle", "content", "image", "colour", "externalLink"
+    ]);
+
+    // Handle the external link field: disable/enable fields based on external link input
+    toggleFieldsBasedOnCondition("externalLink", (value) => value.trim() !== "", [
+        "subtitle", "content", "image", "colour", "customPage", "parent", "category"
+    ]);
 
     if (window.location.search.includes('id=')) {
         updateForm();  // Only call updateForm if there’s an ID in the URL (edit mode)

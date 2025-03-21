@@ -52,12 +52,18 @@ function createListItem(page, validPages) {
     itemDiv.addEventListener('click', () => {
         // Check if the clicked item has children by looking for other rows with this 'id' as the parent
         const hasChildren = isParentForOtherRows(page.id, validPages); // Pass validPages here
+
         if (hasChildren) {
             // If there are child items, reload the same page with 'parent' set to this item's 'id'
             window.location.href = `items.html?parent=${page.id}`;
         } else {
-            // Otherwise, redirect to the 'single-item.html' page with 'id' as a URL parameter
-            window.location.href = `single-item.html?id=${page.id}`;
+            // If the page has no children and the 'external_link' field is not empty, redirect to the external link
+            if (page.external_link) {
+                window.location.href = page.external_link;
+            } else {
+                // Otherwise, redirect to the 'single-item.html' page with 'id' as a URL parameter
+                window.location.href = `single-item.html?id=${page.id}`;
+            }
         }
     });
 
