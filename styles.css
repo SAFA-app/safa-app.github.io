@@ -55,6 +55,13 @@ main {
     }
 }
 
+h2, h3 {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+
 /* Basic page container */
 .container {
     width: 90%;
@@ -150,30 +157,54 @@ tr:hover {
 #items-list-container {
     display: flex;
     flex-direction: column;
-    padding: 5px;
+    padding: 15px; /* Added more padding for a cleaner look */
+    gap: 10px; /* Adds space between items */
+    background-color: #f8f9fa; /* Light background for the container */
+    border-radius: 8px;
 }
 
+/* Individual list item styling */
 .list-item {
     display: flex;
     align-items: center;
-    margin-bottom: 5px;
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    transition: background-color 0.3s;
+    margin-bottom: 10px; /* More space between items */
+    padding: 12px 15px; /* Comfortable padding */
+    border: 1px solid #ddd; /* Subtle border */
+    border-radius: 10px; /* Rounded corners for a modern feel */
+    background-color: #ffffff; /* White background for list items */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+    transition: background-color 0.3s, transform 0.2s ease-in-out; /* Smooth hover effect */
 }
 
 .list-item:hover {
-    background-color: #f0f0f0;
+    background-color: #e9f7fd; /* Light blue on hover */
+    transform: scale(1.05); /* Slight scaling effect for a more interactive feel */
 }
 
+/* Styling for the circle */
 .circle {
-    width: 25px;
-    height: 25px;
+    width: 35px;
+    height: 35px;
     border-radius: 50%;
     margin-right: 15px;
+    background-color: #007bff; /* Blue background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white; /* White text for the circle */
+    font-weight: bold; /* Emphasize the number or letter inside */
+    font-size: 16px; /* Adjusted font size for better visibility */
 }
 
+/* Styling for the item title */
 .item-title {
     font-weight: bold;
+    font-size: 16px; /* Slightly larger text for better readability */
+    color: #333; /* Dark color for text */
+    letter-spacing: 0.5px; /* Subtle letter spacing for a cleaner look */
+}
+
+/* Optional: Add a light border on hover */
+.list-item:hover .item-title {
+    color: #007bff; /* Change text color to blue when hovered */
 }
