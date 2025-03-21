@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIVOS Y DIFUNTOS 2024</title>
+    <script>
+        window.onload = function() {
+            const monthsToPages = {
+                1: 1,    // January
+                2: 2,    // February
+                3: 4,    // March
+                4: 6,    // April
+                5: 7,    // May
+                6: 9,    // June
+                7: 10,   // July
+                8: 12,   // August
+                9: 13,   // September
+                10: 15,  // October
+                11: 16,  // November
+                12: 17   // December
+            };
+
+            const currentMonth = new Date().getMonth() + 1; // getMonth() returns 0-11, so add 1
+            const pageNumber = monthsToPages[currentMonth];
+            const pdfUrl = '/pages/custom/VIVOS_Y_DIFUNTOS_2024.pdf#page=' + pageNumber;
+
+            // Set the src of the PDF embed to the page for the current month
+            document.getElementById('pdfEmbed').src = pdfUrl;
+        };
+    </script>
+</head>
+<body>
+    <h1>VIVOS Y DIFUNTOS 2024</h1>
+    <embed id="pdfEmbed" src="" width="100%" height="800px" type="application/pdf">
+    <p>If the PDF doesn't display correctly, you may need a PDF viewer or a compatible browser.</p>
+</body>
+</html>
