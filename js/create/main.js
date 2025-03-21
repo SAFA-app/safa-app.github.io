@@ -99,16 +99,29 @@ function clearEditorContent() {
 async function populateDropdown() {
     const validPages = await getValidPages(true);
 
+    console.log("Filtering pages for 'parent' dropdown...");
+
+    // Filter out pages where external_link is not empty or custom_page is 'TRUE'
+    const filteredPages = validPages.filter(page => {
+        return !(page.external_link && page.external_link.trim() !== "" || page.custom_page === 'TRUE');
+    });
+
+    console.log(`Filtered out ${validPages.length - filteredPages.length} pages for the 'parent' dropdown.`);
+    console.log(`Remaining ${filteredPages.length} pages will be added to the dropdown.`);
+
     const parentSelect = document.getElementById("parent");
     parentSelect.innerHTML = '<option value="">Select Parent</option>';
 
-    validPages.forEach(page => {
+    filteredPages.forEach(page => {
         const option = document.createElement("option");
         option.value = page.id;
         option.textContent = page.title;
         parentSelect.appendChild(option);
     });
+
+    console.log("Parent dropdown populated with filtered pages.");
 }
+
 
 // Function to get the ID from the URL
 function getURLParameter(name) {
