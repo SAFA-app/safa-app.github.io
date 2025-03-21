@@ -24,6 +24,13 @@
         }
         .pdf-container {
             padding: 10px;
+            width: 100%;
+            overflow-x: hidden;
+        }
+        @media (max-width: 600px) {
+            canvas {
+                width: 100% !important;
+            }
         }
     </style>
     <script>
@@ -50,52 +57,66 @@
             // Get the page number for the current month
             const startPageNumber = monthsToPages[currentMonth];
 
-            // PDF URL
+            // PDF URL (ensure it’s cached in the PWA's service worker for offline use)
             const pdfUrl = '/pages/custom/VIVOS_Y_DIFUNTOS_2024.pdf';
 
-            // Load the PDF using PDF.js
-            pdfjsLib.getDocument(pdfUrl).promise.then(function(pdf) {
-                // Function to render each page
-                function renderPage(pageNumber) {
-                    pdf.getPage(pageNumber).then(function(page) {
-                        // Set up the canvas for rendering the PDF
-                        const scale = 1.5;  // Adjust scale for better clarity
-                        const viewport = page.getViewport({ scale: scale });
+            // Function to load and render the PDF using PDF.js
+            function loadPDF(pdfUrl) {
+                pdfjsLib.getDocument(pdfUrl).promise.then(function(pdf) {
+                    // Function to render each page
+                    function renderPage(pageNumber) {
+                        pdf.getPage(pageNumber).then(function(page) {
+                            const scale = 1.5;  // Adjust scale for better clarity
+                            const viewport = page.getViewport({ scale: scale });
 
-                        const canvas = document.createElement('canvas');
-                        const context = canvas.getContext('2d');
-                        document.getElementById('pdfContainer').appendChild(canvas); // Add canvas to the container
+                            const canvas = document.createElement('canvas');
+                            const context = canvas.getContext('2d');
+                            document.getElementById('pdfContainer').appendChild(canvas); // Add canvas to the container
 
-                        canvas.height = viewport.height;
-                        canvas.width = viewport.width;
+                            canvas.height = viewport.height;
+                            canvas.width = viewport.width;
 
-                        // Render the page into the canvas context
-                        page.render({
-                            canvasContext: context,
-                            viewport: viewport
-                        });
-                    });
-                }
-
-                // Render all pages
-                for (let i = 1; i <= pdf.numPages; i++) {
-                    renderPage(i);
-                }
-
-                // Scroll to the current month's page after rendering
-                setTimeout(() => {
-                    const pageToScroll = startPageNumber - 1; // Adjust for 0-based index
-                    const targetCanvas = document.querySelectorAll('canvas')[pageToScroll];
-                    if (targetCanvas) {
-                        targetCanvas.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
+                            // Render the page into the canvas context
+                            page.render({
+                                canvasContext: context,
+                                viewport: viewport
+                            });
                         });
                     }
-                }, 1000); // Delay to ensure rendering is completed
-            }).catch(function(error) {
-                console.error('Error loading PDF: ', error);
-            });
+
+                    // Render all pages
+                    for (let i = 1; i <= pdf.numPages; i++) {
+                        renderPage(i);
+                    }
+
+                    // Scroll to the current month's page after rendering
+                    setTimeout(() => {
+                        const pageToScroll = startPageNumber - 1; // Adjust for 0-based index
+                        const targetCanvas = document.querySelectorAll('canvas')[pageToScroll];
+                        if (targetCanvas) {
+                            targetCanvas.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'start'
+                            });
+                        }
+                    }, 1000); // Delay to ensure rendering is completed
+                }).catch(function(error) {
+                    console.error('Error loading PDF: ', error);
+                });
+            }
+
+            // Check if the PDF is available in the cache (using service worker caching)
+            if ('caches' in window) {
+                caches.match(pdfUrl).then(function(response) {
+                    if (response) {
+                        console.log("Using cached PDF...");
+                        loadPDF(response); // Load from cache
+                    } else {
+                        console.log("Fetching PDF from the network...");
+                        loadPDF(pdfUrl); // Load from network
+                    }
+                });
+            }
         };
     </script>
 </head>
