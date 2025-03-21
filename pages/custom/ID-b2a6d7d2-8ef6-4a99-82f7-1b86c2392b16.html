@@ -7,7 +7,6 @@
     <title>Compleanni e memorie defunti</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
     <style>
-
         canvas {
             display: block;
             margin: 20px auto;
@@ -72,6 +71,19 @@
                                 canvasContext: context,
                                 viewport: viewport
                             });
+
+                            // Example of an external link associated with a page (you should replace this logic)
+                            if (page.external_link) {
+                                const externalLinkButton = document.createElement('button');
+                                externalLinkButton.textContent = 'Link';
+                                // Set up the button's click event to open the link in a new tab
+                                externalLinkButton.addEventListener('click', () => {
+                                    window.open(page.external_link, '_blank'); // Open the link in a new tab
+                                });
+
+                                // Append the button to the container
+                                document.getElementById('pdfContainer').appendChild(externalLinkButton);
+                            }
                         });
                     }
 
@@ -116,5 +128,8 @@
     <div class="pdf-container" id="pdfContainer">
         <!-- Canvas elements will be appended here -->
     </div>
+    <footer id="sticky-footer">
+        <button id="back-button">Indietro</button>
+    </footer>
 </body>
 </html>
