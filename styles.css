@@ -168,7 +168,7 @@ tr:hover {
     display: flex;
     align-items: center;
     margin-bottom: 5px; /* More space between items */
-    padding: 12px 15px; /* Comfortable padding */
+    padding: 8px 10px; /* Comfortable padding */
     border: 1px solid #ddd; /* Subtle border */
     border-radius: 10px; /* Rounded corners for a modern feel */
     background-color: #ffffff; /* White background for list items */
@@ -193,7 +193,7 @@ tr:hover {
 /* Styling for the item title */
 .item-title {
     font-weight: bold;
-    font-size: 16px; /* Slightly larger text for better readability */
+    font-size: 14px; /* Slightly larger text for better readability */
     color: #333; /* Dark color for text */
     letter-spacing: 0.5px; /* Subtle letter spacing for a cleaner look */
 }
