@@ -24,6 +24,12 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     // Step 4: Render the page content
     renderPage(page);
+    
+    // Step 5: Add functionality to the 'Back' button
+    const backButton = document.getElementById('back-button');
+    backButton.addEventListener('click', function() {
+        window.history.back(); // Navigate back to the previous page
+    });
 });
 
 // Function to render the page content dynamically
@@ -55,15 +61,14 @@ function renderPage(page) {
     contentElement.innerHTML = page.content;
     contentContainer.appendChild(contentElement);
 
-// Add an external link button if the external_link is not empty
-if (page.external_link) {
-    const externalLinkButton = document.createElement('button');
-    externalLinkButton.textContent = 'Link';
-    // Set up the button's click event to open the link in a new tab
-    externalLinkButton.addEventListener('click', () => {
-        window.open(page.external_link, '_blank'); // Open the link in a new tab
-    });
-    contentContainer.appendChild(externalLinkButton);
+    // Add an external link button if the external_link is not empty
+    if (page.external_link) {
+        const externalLinkButton = document.createElement('button');
+        externalLinkButton.textContent = 'Link';
+        // Set up the button's click event to open the link in a new tab
+        externalLinkButton.addEventListener('click', () => {
+            window.open(page.external_link, '_blank'); // Open the link in a new tab
+        });
+        contentContainer.appendChild(externalLinkButton);
 }
-
 }
