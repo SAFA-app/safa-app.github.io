@@ -10,16 +10,13 @@
 <body>
     <h1>Gestore pagine</h1>
 
-    <table id="pagesTable">
-        <thead>
-            <tr>
-                <!-- Dynamic headers will be inserted here -->
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Dynamic rows will be inserted here -->
-        </tbody>
-    </table>
+    <!-- Dropdown for selecting a page -->
+    <div class="dropdown-container">
+        <label for="pagesDropdown">Seleziona una pagina:</label>
+        <select id="pagesDropdown">
+            <!-- Dynamic options will be inserted here -->
+        </select>
+    </div>
 
     <div class="form-container">
         <label for="deletionFormId">Google Form ID:</label>
@@ -27,9 +24,11 @@
         <button id="deleteBtn">Elimina pagina</button>
         <button id="editBtn">Modifica pagina</button>
     </div>
+
     <footer id="sticky-footer">
         <button id="back-button">Indietro</button>
     </footer>
+
     <script src="/main.js"></script>
     <script type="module" src="/js/manage-page.js"></script>
 </body>

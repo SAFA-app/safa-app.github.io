@@ -4,50 +4,24 @@ import { getValidPages } from './page-utils.js';
 async function fetchValidPages() {
     const validPages = await getValidPages(true);
     console.log(validPages);
-    const tableBody = document.getElementById('pagesTable').getElementsByTagName('tbody')[0];
-    const tableHeader = document.getElementById('pagesTable').getElementsByTagName('thead')[0].getElementsByTagName('tr')[0];
 
-    const keys = Object.keys(validPages[0]);
-    keys.forEach(key => {
-        if (key !== 'id') {
-            const headerCell = document.createElement('th');
-            headerCell.textContent = key.charAt(0).toUpperCase() + key.slice(1);
-            tableHeader.appendChild(headerCell);
-        }
-    });
+    const pagesDropdown = document.getElementById('pagesDropdown');
+    pagesDropdown.innerHTML = ''; // Clear the dropdown first
 
-    const selectHeader = document.createElement('th');
-    selectHeader.textContent = 'Select';
-    tableHeader.insertBefore(selectHeader, tableHeader.firstChild);
+    // Create and append a default 'Select a page' option
+    const defaultOption = document.createElement('option');
+    defaultOption.textContent = 'Seleziona una pagina';
+    defaultOption.disabled = true;
+    defaultOption.selected = true;
+    pagesDropdown.appendChild(defaultOption);
 
     validPages.forEach(page => {
-        const row = tableBody.insertRow();
-
-        // Create a 'Select' radio button
-        const selectCell = row.insertCell(0);
-        const selectRadio = document.createElement('input');
-        selectRadio.type = 'radio';
-        selectRadio.name = 'selectPage';
-        selectRadio.dataset.id = page.id;
-        selectCell.appendChild(selectRadio);
-
-        keys.forEach(key => {
-            if (key !== 'id') {
-                const cell = row.insertCell();
-                const cellText = String(page[key]);
-
-
-                // Truncate text if it's too long
-                if (cellText.length > 40) {
-                    cell.textContent = cellText.slice(0, 40) + '...';
-                } else {
-                    cell.textContent = cellText;
-                }
-            }
-        });
+        const option = document.createElement('option');
+        option.value = page.id; // Store the page ID in the option's value
+        option.textContent = page.title || page.id; // Display the title or fall back to the ID if no title is available
+        pagesDropdown.appendChild(option);
     });
 }
-
 
 export async function deletePage() {
     const formId = document.getElementById('deletionFormId').value.trim();
@@ -58,13 +32,14 @@ export async function deletePage() {
         return;
     }
 
-    const selectedRadio = document.querySelector('input[type="radio"]:checked');
-    if (!selectedRadio) {
+    const pagesDropdown = document.getElementById('pagesDropdown');
+    const selectedId = pagesDropdown.value;
+    
+    if (!selectedId) {
         alert('Please select a page to delete');
         return;
     }
 
-    const selectedId = selectedRadio.dataset.id;
     console.log('Selected Page ID:', selectedId);
 
     const formUrl = `https://docs.google.com/forms/d/e/${formId}/formResponse`;
@@ -79,7 +54,7 @@ export async function deletePage() {
         });
 
         alert(`Page with ID ${selectedId} deleted successfully!`);
-        selectedRadio.closest('tr').remove();
+        fetchValidPages(); // Re-fetch pages to update the dropdown
     } catch (error) {
         console.error('Error submitting form:', error);
         alert('Error deleting page: ' + error.message);
@@ -87,14 +62,14 @@ export async function deletePage() {
 }
 
 function editPage() {
-    const selectedRadio = document.querySelector('input[type="radio"]:checked');
-    
-    if (!selectedRadio) {
+    const pagesDropdown = document.getElementById('pagesDropdown');
+    const selectedId = pagesDropdown.value;
+
+    if (!selectedId) {
         alert('Please select a page to edit');
         return;
     }
 
-    const selectedId = selectedRadio.dataset.id;
     window.open(`./create-page.html?id=${selectedId}`, '_self');
 }
 
