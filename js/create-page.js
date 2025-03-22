@@ -180,7 +180,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Handle the external link field: disable/enable fields based on external link input
     toggleFields("externalLink", (value) => value.trim() !== "", [
-        "subtitle", "content", "image", "customPage", "parent", "category"
+        "subtitle", "content", "image", "customPage", "category"
     ]);
 
     if (window.location.search.includes('id=')) {
