@@ -16,12 +16,7 @@
             <li><a href="/pages/manage-page.html" id="managePageLink">Gestisci pagine</a></li>
             <li><a href="javascript:void(0);" id="downloadLink">Download pagine</a></li>
     </div>
-
-    <script type="module">
-        import { downloadValidPagesCSV } from '/js/page-utils.js';  // Import the function
-    
-        // Add event listener to the download link
-        document.getElementById('downloadLink').addEventListener('click', downloadValidPagesCSV);
-    </script>
+    <script src="/main.js"></script>
+    <script type="module" src="/js/admin.js"></script>
 </body>
 </html>

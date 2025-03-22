@@ -1,4 +1,4 @@
-import { getValidPages } from '/js/page-utils.js'; // Import the utility function
+import { getValidPages } from './page-utils.js'; // Import the utility function
 
 // This function will run when the DOM is ready
 document.addEventListener('DOMContentLoaded', async function() {
@@ -24,12 +24,6 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     // Step 4: Render the page content
     renderPage(page);
-    
-    // Step 5: Add functionality to the 'Back' button
-    const backButton = document.getElementById('back-button');
-    backButton.addEventListener('click', function() {
-        window.history.back(); // Navigate back to the previous page
-    });
 });
 
 // Function to render the page content dynamically

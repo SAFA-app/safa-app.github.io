@@ -1,4 +1,4 @@
-import { getValidPages } from '/js/page-utils.js'; // Import utility function to fetch valid pages
+import { getValidPages } from './page-utils.js'; // Import utility function to fetch valid pages
 
 document.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -24,12 +24,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     filteredPages.forEach(page => {
         const itemElement = createListItem(page, validPages); // Pass validPages here
         itemsListContainer.appendChild(itemElement);
-    });
-
-    // Add functionality to the back button
-    const backButton = document.getElementById('back-button');
-    backButton.addEventListener('click', () => {
-        window.history.back(); // Simply navigate back in the browser's history
     });
 });
 

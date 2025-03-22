@@ -1,27 +1,8 @@
-import { updateLocalStorageWithFreshData } from '/js/page-utils.js';
+// Add functionality to the back button
+const backButton = document.getElementById('back-button');
 
-document.addEventListener('DOMContentLoaded', function() {
-    const homeLogo = document.getElementById('home-logo');
-    const updateButton = document.getElementById('updateButton');
-    const notification = document.getElementById('notification'); // Get the notification div
-
-    if (homeLogo) {
-        homeLogo.addEventListener('click', function() {
-            window.location.href = 'pages/items.html';
-        });
-    }
-    
-    if (updateButton) {
-        updateButton.addEventListener('click', async function() {
-            // Show loading message while the update is in progress
-            updateNotification("Update in progress...");
-
-            await updateLocalStorageWithFreshData();
-        });
-    }
-
-    // Function to update notification text
-    function updateNotification(message) {
-        notification.textContent = message;
-    }
-});
+if (backButton) {  // Ensure the button exists before attaching the event listener
+    backButton.addEventListener('click', () => {
+        window.history.back(); // Simply navigate back in the browser's history
+    });
+}

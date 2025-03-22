@@ -1,5 +1,5 @@
-import config from '/js/config.js';
-import { getValidPages } from '/js/page-utils.js';
+import config from './config.js';
+import { getValidPages } from './page-utils.js';
 
 async function fetchValidPages() {
     const validPages = await getValidPages(true);
