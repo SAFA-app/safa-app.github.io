@@ -3,30 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestore pagine</title>
+    <title>Gestore Pagine</title>
     <link rel="stylesheet" href="/styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 </head>
 <body>
-    <h1>Gestore pagine</h1>
+    <header>
+        <h1>Gestore Pagine</h1>
+    </header>
 
-    <!-- Dropdown for selecting a page -->
-    <div class="dropdown-container">
-        <label for="pagesDropdown">Seleziona una pagina:</label>
-        <select id="pagesDropdown">
-            <!-- Dynamic options will be inserted here -->
-        </select>
-    </div>
+    <main>
+        <section class="dropdown-section">
+            <label for="pagesDropdown">Seleziona una pagina:</label>
+            <select id="pagesDropdown">
+                <!-- Dynamic options will be inserted here -->
+            </select>
+        </section>
 
-    <div class="form-container">
-        <label for="deletionFormId">Google Form ID:</label>
-        <input type="text" id="deletionFormId" placeholder="Enter Google Form ID" />
-        <button id="deleteBtn">Elimina pagina</button>
-        <button id="editBtn">Modifica pagina</button>
-    </div>
+        <section class="form-section">
+            <label for="deletionFormId">Google Form ID:</label>
+            <input type="text" id="deletionFormId" placeholder="Inserisci l'ID del Google Form" />
+            
+            <div class="button-container">
+                <button id="deleteBtn" class="action-btn">Elimina Pagina</button>
+                <button id="editBtn" class="action-btn">Modifica Pagina</button>
+            </div>
+        </section>
+    </main>
 
     <footer id="sticky-footer">
-        <button id="back-button">Indietro</button>
+        <button id="back-button" class="action-btn">Indietro</button>
     </footer>
 
     <script src="/main.js"></script>
