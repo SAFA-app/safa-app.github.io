@@ -9,8 +9,7 @@ self.addEventListener('install', (event) => {
     console.log('Installing service worker and caching necessary URLs');
     event.waitUntil(
         caches.open(CACHE_NAME).then((cache) => {
-            // Optionally, add some common static resources to cache
-            return cache.addAll([
+            const urlsToCache = [
                 '/',
                 '/index.html',
                 '/pages/items.html',
@@ -18,10 +17,18 @@ self.addEventListener('install', (event) => {
                 '/styles.css',
                 '/main.js',
                 '/images/logoSAFA.png',
-                '/index.js',
-                '/items.js',
-                '/single-item.js',
-            ]);
+                'js/index.js',
+                'js/items.js',
+                'js/single-item.js',
+            ];
+
+            return Promise.all(
+                urlsToCache.map((url) =>
+                    cache.add(url).catch((error) => {
+                        console.error(`Failed to cache ${url}:`, error);
+                    })
+                )
+            );
         })
     );
 });
@@ -67,13 +74,13 @@ self.addEventListener('fetch', (event) => {
             // Fetch from network if not cached
             return fetch(event.request).then((networkResponse) => {
                 if (networkResponse && networkResponse.status === 200) {
+                    const clonedResponse = networkResponse.clone(); // Clone the response for caching
                     caches.open(CACHE_NAME).then((cache) => {
-                        cache.put(urlWithoutParams, networkResponse.clone()); // Cache the normalized URL
+                        cache.put(urlWithoutParams, clonedResponse); // Cache the normalized URL
                     });
                 }
-                return networkResponse; // Return the network response
+                return networkResponse; // Return the original network response
             });
         })
     );
 });
-
