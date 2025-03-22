@@ -13,6 +13,7 @@ body {
     padding: 20px;
     margin: 0;
     width: 100%;
+    padding-bottom: 50px; /* Add some bottom padding to ensure content isn't covered by the footer */
 }
 
 main {
@@ -21,37 +22,28 @@ main {
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    min-height: calc(100vh - 80px); /* Ensures main content area takes at least the full height minus the footer's height */
 }
 
 /* Media Queries for responsiveness */
 @media (max-width: 768px) {
     body {
-        padding: 10px;
-        /* Reduced padding for mobile */
+        padding-bottom: 60px; /* Add extra space at the bottom for mobile to avoid footer overlap */
     }
 
     main {
-        margin: 10px 0;
-        padding: 15px;
-        /* Reduced padding for smaller screens */
-    }
-
-    /* Optional: Adjust font size for mobile */
-    body {
-        font-size: 14px;
+        min-height: calc(100vh - 120px); /* Ensure the content area is large enough to accommodate footer */
     }
 }
 
+/* Mobile-specific footer adjustment */
 @media (max-width: 480px) {
-    main {
-        margin: 5px 0;
-        padding: 10px;
-        /* Even smaller padding */
+    body {
+        padding-bottom: 70px; /* Add more space at the bottom for very small screens */
     }
 
-    body {
-        font-size: 13px;
-        /* Further reduce font size for very small screens */
+    main {
+        min-height: calc(100vh - 140px); /* Ensure the content area is large enough for very small screens */
     }
 }
 
@@ -61,9 +53,10 @@ main {
     bottom: 0;
     left: 0;
     width: 100%;
-    background-color: white; /* Background color (adjust as needed) */
+    background-color: white;
     text-align: center;
     padding: 10px 0;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Optional: Adds shadow on top of the footer for separation */
 }
 
 h2, h3 {
