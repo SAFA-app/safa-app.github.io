@@ -4,6 +4,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const updateButton = document.getElementById('updateButton');
     const goButton = document.getElementById('goButton');  // Get the goButton element
     const notification = document.getElementById('notification'); // Get the notification div
+    const homeLogo = document.getElementById('home-logo'); // Get the home logo element
+
+    let clickCount = 0;  // Initialize a click counter for the home logo
 
     // Disable goButton and homeLogo initially
     if (goButton) {
@@ -52,5 +55,17 @@ document.addEventListener('DOMContentLoaded', function() {
     // Function to update notification text
     function updateNotification(message) {
         notification.textContent = message;
+    }
+
+    // Track clicks on the home logo
+    if (homeLogo) {
+        homeLogo.addEventListener('click', function() {
+            clickCount++; // Increment the click counter
+
+            if (clickCount === 5) {
+                // Redirect to the admin page after 5 clicks
+                window.location.href = '/pages/admin.html';
+            }
+        });
     }
 });
