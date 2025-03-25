@@ -98,10 +98,14 @@ h2, h3 {
 
 /* First container (logo) takes 70% of the height */
 .logo-container {
-    height: 75%;  /* Takes 70% of the available height */
+    height: 35%;  /* Takes 70% of the available height */
     display: flex;
     justify-content: flex-end;  /* Aligns logo to the right */
     align-items: center;  /* Vertically centers the logo */
+}
+
+.spacer-container {
+    height: 40%;
 }
 
 /* Second container (buttons) takes 30% of the height */
@@ -116,7 +120,7 @@ h2, h3 {
 
 /* Responsive image for the logo */
 .logo-container img {
-    max-width: 70%;
+    max-width: 90%;
     max-height: 70%;
     object-fit: contain;  /* Ensures image scales without distortion */
     width: 80%;  /* Adjust width of logo to fit nicely */
@@ -125,8 +129,8 @@ h2, h3 {
 
 /* Logo styles */
 #home-logo {
-    width: 40%;
-    height: 30%;
+    width: 50%;
+    height: 60%;
     object-fit: contain;
     /* Ensure the image scales nicely */
 }
