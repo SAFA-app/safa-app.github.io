@@ -111,7 +111,9 @@ h2, h3 {
     flex-direction: row;
     justify-content: space-between;  /* Distributes space between button and admin link */
     align-items: center;  /* Centers the items horizontally */
+    padding-top: 30%;  /* Adds top padding */
 }
+
 
 /* Responsive image for the logo */
 .logo-container img {
@@ -124,8 +126,8 @@ h2, h3 {
 
 /* Logo styles */
 #home-logo {
-    width: 90%;
-    height: 60%;
+    width: 60%;
+    height: 30%;
     object-fit: contain;
     /* Ensure the image scales nicely */
 }
@@ -137,10 +139,11 @@ h2, h3 {
 
 /* Styling specific to the 'Go' button with more rounded/oval shape */
 #goButton {
-    background-color: #28a745; /* Green background for contrast */
+    background-color: #E2001A; /* Green background for contrast */
+    color: #E3BD00;
+    font-weight: bold;
     font-size: 18px; /* Slightly larger font size */
     padding: 14px 40px; /* More horizontal padding for an oval look */
-    border: 2px solid #218838; /* Border to give more definition */
     border-radius: 50px; /* Make the button oval by increasing border-radius */
     cursor: pointer; /* Pointer cursor on hover */
     transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s; /* Smooth transition for effects */
