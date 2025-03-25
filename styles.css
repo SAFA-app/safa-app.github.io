@@ -106,37 +106,33 @@ h2, h3 {
     width: 100%;
 }
 
+/* Responsive image for the logo */
+.logo-container img {
+    object-fit: contain;  /* Ensures image scales without distortion */
+    height: auto;
+}
+
+/* Logo styles */
+#home-logo {
+    height: 40%;
+    object-fit: contain;
+
+}
+
 .spacer-container {
     height: 40%;
 }
 
 /* Second container (buttons) takes 30% of the height */
 .actions-container {
-    height: 25%;  /* Takes 30% of the available height */
+    height: 25%;  /* Takes 25% of the available height */
     display: flex;
+    justify-content: flex-end;
     flex-direction: row;
-    justify-content: space-between;  /* Distributes space between button and admin link */
     align-items: center;  /* Centers the items horizontally */
     width: 100%;
-    max-width: 500px;
 }
 
-
-/* Responsive image for the logo */
-.logo-container img {
-
-    object-fit: contain;  /* Ensures image scales without distortion */
-    width: 80%;  /* Adjust width of logo to fit nicely */
-    height: auto;
-}
-
-/* Logo styles */
-#home-logo {
-    width: 40%;
-    height: 50%;
-    object-fit: contain;
-    /* Ensure the image scales nicely */
-}
 
 /* Notification text in home */
 #notification {
