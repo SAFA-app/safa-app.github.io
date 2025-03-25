@@ -245,22 +245,7 @@ body.items-page #sticky-footer {
     box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.5); /* Slight shadow for the footer */
 }
 
-/* Style for the back button in the footer */
-body.items-page #back-button {
-    background-color: #007bff;  /* Bright blue color for the button */
-    color: #ffffff;  /* White text for visibility */
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-size: 16px;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
-}
 
-/* Hover effect for the back button */
-body.items-page #back-button:hover {
-    background-color: #0056b3; /* Darker blue on hover */
-}
 /* Add styles for list items to maintain consistency */
 body.items-page .list-item {
     display: flex;
