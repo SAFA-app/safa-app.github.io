@@ -142,6 +142,8 @@ h2, h3 {
     padding: 14px 40px; /* More horizontal padding for an oval look */
     border: 2px solid #218838; /* Border to give more definition */
     border-radius: 50px; /* Make the button oval by increasing border-radius */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s; /* Smooth transition for effects */
 }
 
 /* Hover effect for 'Go' button */
@@ -157,6 +159,25 @@ h2, h3 {
     box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.3), inset -2px -2px 5px rgba(255, 255, 255, 0.3);
     transform: translateY(2px);
 }
+
+/* Disabled state for 'Go' button */
+#goButton:disabled {
+    background-color: #d6d6d6; /* Light grey background to show it's disabled */
+    border-color: #b3b3b3; /* Lighter border */
+    color: #999; /* Lighter text color */
+    cursor: not-allowed; /* Change cursor to indicate it's not clickable */
+    box-shadow: none; /* Remove any box-shadow */
+    transform: none; /* Remove the transform effect */
+}
+
+/* Optionally, disable hover and active styles when the button is disabled */
+#goButton:disabled:hover,
+#goButton:disabled:active {
+    background-color: #d6d6d6; /* Keep the same grey color when disabled */
+    transform: none; /* Remove transform effect */
+    box-shadow: none; /* No shadow */
+}
+
 
 
 
