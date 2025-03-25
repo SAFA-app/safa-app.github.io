@@ -5,7 +5,6 @@
   "start_url": ".",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#121212",
   "icons": [
     {
       "src": "./icons/android/android-launchericon-192-192.png",
