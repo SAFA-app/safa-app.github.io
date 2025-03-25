@@ -128,7 +128,7 @@ h2, h3 {
     height: 25%;  /* Takes 25% of the available height */
     display: flex;
     justify-content: center;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;  /* Centers the items horizontally */
     width: 100%;
 }
