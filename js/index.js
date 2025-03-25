@@ -10,10 +10,18 @@ document.addEventListener('DOMContentLoaded', function() {
     if (goButton) {
         goButton.disabled = true;
     }
+
+    // Set a maximum time limit of 4 seconds for goButton to stay disabled
+    setTimeout(() => {
+        if (goButton) {
+            goButton.disabled = false;
+        }
+    }, 4000); // 4 seconds timeout
+
     // Call getValidPages() and wait for it to finish
     getValidPages(true).then(() => {
-        // Enable goButton after getValidPages is complete
-        if (goButton) {
+        // Enable goButton after getValidPages is complete, but only if the timeout hasn't triggered yet
+        if (goButton && goButton.disabled) {
             goButton.disabled = false;
         }
     });
