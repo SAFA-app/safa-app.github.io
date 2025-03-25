@@ -98,7 +98,7 @@ h2, h3 {
 
 /* First container (logo) takes 70% of the height */
 .logo-container {
-    height: 60%;  /* Takes 70% of the available height */
+    height: 75%;  /* Takes 70% of the available height */
     display: flex;
     justify-content: flex-end;  /* Aligns logo to the right */
     align-items: center;  /* Vertically centers the logo */
@@ -106,12 +106,11 @@ h2, h3 {
 
 /* Second container (buttons) takes 30% of the height */
 .actions-container {
-    height: 40%;  /* Takes 30% of the available height */
+    height: 25%;  /* Takes 30% of the available height */
     display: flex;
     flex-direction: row;
     justify-content: space-between;  /* Distributes space between button and admin link */
     align-items: center;  /* Centers the items horizontally */
-    padding-top: 30%;  /* Adds top padding */
 }
 
 
@@ -126,7 +125,7 @@ h2, h3 {
 
 /* Logo styles */
 #home-logo {
-    width: 60%;
+    width: 40%;
     height: 30%;
     object-fit: contain;
     /* Ensure the image scales nicely */
