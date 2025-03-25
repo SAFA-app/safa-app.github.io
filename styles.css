@@ -135,6 +135,30 @@ h2, h3 {
     color: white;
 }
 
+/* Styling specific to the 'Go' button with more rounded/oval shape */
+#goButton {
+    background-color: #28a745; /* Green background for contrast */
+    font-size: 18px; /* Slightly larger font size */
+    padding: 14px 40px; /* More horizontal padding for an oval look */
+    border: 2px solid #218838; /* Border to give more definition */
+    border-radius: 50px; /* Make the button oval by increasing border-radius */
+}
+
+/* Hover effect for 'Go' button */
+#goButton:hover {
+    background-color: #218838; /* Darker green */
+    box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.3), -4px -4px 12px rgba(255, 255, 255, 0.3);
+    transform: translateY(-3px);
+}
+
+/* Active effect for 'Go' button */
+#goButton:active {
+    background-color: #1e7e34; /* Even darker green */
+    box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.3), inset -2px -2px 5px rgba(255, 255, 255, 0.3);
+    transform: translateY(2px);
+}
+
+
 
 /* --------------------------------------------- */
 /* Button styles */
