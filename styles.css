@@ -139,7 +139,7 @@ h2, h3 {
 
 /* Styling specific to the 'Go' button with more rounded/oval shape */
 #goButton {
-    background-color: #E2001A; /* Green background for contrast */
+    background-color: #E2001A; /* red background*/
     color: #E3BD00;
     font-weight: bold;
     font-size: 18px; /* Slightly larger font size */
@@ -151,14 +151,14 @@ h2, h3 {
 
 /* Hover effect for 'Go' button */
 #goButton:hover {
-    background-color: #218838; /* Darker green */
+    background-color: #af0014; /* Darker red */
     box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.3), -4px -4px 12px rgba(255, 255, 255, 0.3);
     transform: translateY(-3px);
 }
 
 /* Active effect for 'Go' button */
 #goButton:active {
-    background-color: #1e7e34; /* Even darker green */
+    background-color: #E2001A;
     box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.3), inset -2px -2px 5px rgba(255, 255, 255, 0.3);
     transform: translateY(2px);
 }
