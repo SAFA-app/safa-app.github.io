@@ -1,14 +1,12 @@
-import { updateLocalStorageWithFreshData, getValidPages } from './page-utils.js';
+import { getValidPages } from './page-utils.js';
 
 document.addEventListener('DOMContentLoaded', function() {
-    const updateButton = document.getElementById('updateButton');
     const goButton = document.getElementById('goButton');  // Get the goButton element
-    const notification = document.getElementById('notification'); // Get the notification div
     const homeLogo = document.getElementById('home-logo'); // Get the home logo element
 
     let clickCount = 0;  // Initialize a click counter for the home logo
 
-    // Disable goButton and homeLogo initially
+    // Disable goButton initially
     if (goButton) {
         goButton.disabled = true;
     }
@@ -28,33 +26,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    if (updateButton) {
-        updateButton.addEventListener('click', async function() {
-            // Show loading message while the update is in progress
-            updateNotification("Aggiornamento in corso...");
-
-            // Update localStorage with fresh data
-            await updateLocalStorageWithFreshData();
-
-            // Trigger a service worker cache update
-            if (navigator.serviceWorker) {
-                navigator.serviceWorker.ready.then(registration => {
-                    // Send a message to the service worker to trigger cache update
-                    registration.active.postMessage({ action: 'update-cache' });
-                });
-            }
-        });
-    }
-
     if (goButton) {  // Add event listener for goButton
         goButton.addEventListener('click', function() {
             window.location.href = '/pages/items.html';  // Navigate to items.html
         });
-    }
-
-    // Function to update notification text
-    function updateNotification(message) {
-        notification.textContent = message;
     }
 
     // Track clicks on the home logo
@@ -65,6 +40,9 @@ document.addEventListener('DOMContentLoaded', function() {
             if (clickCount === 5) {
                 // Redirect to the admin page after 5 clicks
                 window.location.href = '/pages/admin.html';
+
+                // Reset the click count after the redirection
+                clickCount = 0;
             }
         });
     }

@@ -136,7 +136,7 @@ h2, h3 {
 
 /* Notification text in home */
 #notification {
-    color: white;
+    color: rgb(0, 0, 0);
 }
 
 /* Styling specific to the 'Go' button with more rounded/oval shape */
