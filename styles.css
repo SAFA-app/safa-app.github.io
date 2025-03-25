@@ -91,6 +91,7 @@ h2, h3 {
     max-width: 1200px;
     margin: 0 auto;
     display: flex;
+    align-items: center;
     flex-direction: column;  /* Stacks the containers vertically */
     height: 100vh;  /* Full viewport height */
     gap: 0;  /* No gap between the stacked containers */
@@ -102,6 +103,7 @@ h2, h3 {
     display: flex;
     justify-content: flex-end;  /* Aligns logo to the right */
     align-items: center;  /* Vertically centers the logo */
+    width: 100%;
 }
 
 .spacer-container {
@@ -115,13 +117,14 @@ h2, h3 {
     flex-direction: row;
     justify-content: space-between;  /* Distributes space between button and admin link */
     align-items: center;  /* Centers the items horizontally */
+    width: 100%;
+    max-width: 500px;
 }
 
 
 /* Responsive image for the logo */
 .logo-container img {
-    max-width: 90%;
-    max-height: 70%;
+
     object-fit: contain;  /* Ensures image scales without distortion */
     width: 80%;  /* Adjust width of logo to fit nicely */
     height: auto;
@@ -129,8 +132,8 @@ h2, h3 {
 
 /* Logo styles */
 #home-logo {
-    width: 50%;
-    height: 60%;
+    width: 40%;
+    height: 50%;
     object-fit: contain;
     /* Ensure the image scales nicely */
 }
