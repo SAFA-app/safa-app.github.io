@@ -1,7 +1,6 @@
 import { updateLocalStorageWithFreshData, getValidPages } from './page-utils.js';
 
 document.addEventListener('DOMContentLoaded', function() {
-    const homeLogo = document.getElementById('home-logo');
     const updateButton = document.getElementById('updateButton');
     const goButton = document.getElementById('goButton');  // Get the goButton element
     const notification = document.getElementById('notification'); // Get the notification div

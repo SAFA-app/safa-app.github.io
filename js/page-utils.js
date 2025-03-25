@@ -139,7 +139,7 @@ export async function updateLocalStorageWithFreshData() {
         }
     } catch (error) {
         console.error("Error while updating local storage:", error);
-        notification.textContent = "An error occurred while updating the data."; // Error message
+        notification.textContent = "C'è stato un errore"; // Error message
     }
 }
 
