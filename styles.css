@@ -159,6 +159,7 @@ h2, h3 {
 button {
     display: inline-block;
     background-color: #007bff;
+    padding: 12px 25px;
     color: white;
     text-decoration: none;
     border: none;
