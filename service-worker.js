@@ -1,4 +1,4 @@
-const CACHE_NAME = 'safa-cache-v54';
+const CACHE_NAME = 'safa-cache-v55';
 const EXCLUDE_FROM_CACHE = [
     "https://docs.google.com/spreadsheets/d/1ZuUVyBmIU_Ax5V7Iq-yCUQvN-tmF8RZEh1uhkT6HVFA/export?format=csv",
     "https://docs.google.com/spreadsheets/d/1FVN90zGMNJbKOiBJWCVdVH7UFI74yny4G-3vJBzwrEo/export?format=csv",
@@ -68,9 +68,12 @@ self.addEventListener('fetch', (event) => {
     // Normalize the URL by removing parameters only for these specific pages
     const urlWithoutParams = shouldNormalizeUrl ? url.origin + url.pathname : url.href;
 
+    // Normalize the URLs in EXCLUDE_FROM_CACHE to avoid mismatches (strip query parameters, etc.)
+    const normalizedExcludeUrls = EXCLUDE_FROM_CACHE.map(excludedUrl => new URL(excludedUrl).origin + new URL(excludedUrl).pathname);
+
     // Skip caching for excluded URLs
-    if (EXCLUDE_FROM_CACHE.includes(url.href)) {
-        event.respondWith(fetch(event.request)); // Fetch directly from network
+    if (normalizedExcludeUrls.includes(url.origin + url.pathname)) {
+        event.respondWith(fetch(event.request)); // Fetch directly from network and don't cache
         return;
     }
 
