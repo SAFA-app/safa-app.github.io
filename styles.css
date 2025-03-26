@@ -131,12 +131,17 @@ h2, h3 {
 
 #Sacra-Famiglia {
     height: 100%;
+    box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.8); /* Adjust shadow settings as needed */
+}
+
+.spacer-container {
+    height: 10%;
 }
 
 /* --------------------------------------------- */
 /* Second container (buttons) takes 30% of the height */
 .actions-container {
-    height: 25%;  /* Takes 25% of the available height */
+    height: 15%;  /* Takes 25% of the available height */
     display: flex;
     justify-content: center;
     flex-direction: column;
