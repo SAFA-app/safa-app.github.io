@@ -58,7 +58,7 @@ main {
     background-color: white;
     text-align: center;
     padding: 10px 0;
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Optional: Adds shadow on top of the footer for separation */
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Adds shadow on top of the footer for separation */
 }
 
 h2, h3 {
@@ -144,11 +144,6 @@ h2, h3 {
     width: 100%;
 }
 
-/* Notification text in home */
-#notification {
-    color: rgb(0, 0, 0);
-}
-
 #goButton {
     font-weight: bold;
     font-size: 18px; /* Slightly larger font size */
@@ -206,6 +201,14 @@ a {
 
 a:hover {
     text-decoration: underline;
+}
+
+/* --------------------------------------------- */
+/* Other */
+
+/* Notification text in admin */
+#notification {
+    color: rgb(0, 0, 0);
 }
 
 /* wysiwyg-editor */
