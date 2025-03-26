@@ -68,6 +68,7 @@ h2, h3 {
 }
 
 /* --------------------------------------------- */
+/* --------------------------------------------- */
 /* Homepage styles */
 /* Home container to hold both stacked containers */
 
@@ -85,7 +86,6 @@ h2, h3 {
     margin: 0; /* Remove default body margin */
 }
 
-
 .home-container {
     width: 90%;
     max-width: 1200px;
@@ -97,9 +97,10 @@ h2, h3 {
     gap: 0;  /* No gap between the stacked containers */
 }
 
+/* --------------------------------------------- */
 /* First container (logo) takes 70% of the height */
 .logo-container {
-    height: 35%;  /* Takes 70% of the available height */
+    height: 35%; 
     display: flex;
     justify-content: flex-end;  /* Aligns logo to the right */
     align-items: center;  /* Vertically centers the logo */
@@ -119,10 +120,20 @@ h2, h3 {
 
 }
 
-.spacer-container {
+/* --------------------------------------------- */
+.central-image-container {
     height: 40%;
+    display: flex;
+    justify-content: center;  /* Centers the image horizontally */
+    align-items: center;  /* Centers the image vertically */
+    width: 100%;
 }
 
+#Sacra-Famiglia {
+    height: 100%;
+}
+
+/* --------------------------------------------- */
 /* Second container (buttons) takes 30% of the height */
 .actions-container {
     height: 25%;  /* Takes 25% of the available height */
@@ -132,7 +143,6 @@ h2, h3 {
     align-items: center;  /* Centers the items horizontally */
     width: 100%;
 }
-
 
 /* Notification text in home */
 #notification {
@@ -154,6 +164,7 @@ h2, h3 {
     transform: none; /* Remove the transform effect */
 }
 
+/* --------------------------------------------- */
 /* --------------------------------------------- */
 /* Button styles */
 button {
