@@ -83,10 +83,18 @@ function createListItem(page, validPages) {
                 // Redirect to the custom page based on 'id'
                 window.location.href = `/pages/custom/${page.id}.html`;
             } else {
-                // If the 'custom_page' is not "TRUE", open the 'single-item.html' page with 'id' as a URL parameter
+                // If the 'custom_page' is not "TRUE",check if external_link is provided
                 if (page.external_link) {
-                    window.location.href = page.external_link;
-                } else {
+                    // Generate a timestamp to append to the URL
+                    const timestamp = new Date().getTime();
+                    
+                    // Append the timestamp as a query parameter to avoid caching
+                    const urlWithTimestamp = `${page.external_link}?timestamp=${timestamp}`;
+                    
+                    // Redirect to the URL with the timestamp
+                    window.location.href = urlWithTimestamp;
+                }
+                 else {
                     // Otherwise, redirect to the 'single-item.html' page with 'id' as a URL parameter
                     window.location.href = `single-item.html?id=${page.id}`;
                 }
