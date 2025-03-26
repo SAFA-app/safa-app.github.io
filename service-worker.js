@@ -1,9 +1,7 @@
-const CACHE_NAME = 'safa-cache-v55';
+const CACHE_NAME = 'safa-cache-v56';
 const EXCLUDE_FROM_CACHE = [
     "https://docs.google.com/spreadsheets/d/1ZuUVyBmIU_Ax5V7Iq-yCUQvN-tmF8RZEh1uhkT6HVFA/export?format=csv",
-    "https://docs.google.com/spreadsheets/d/1FVN90zGMNJbKOiBJWCVdVH7UFI74yny4G-3vJBzwrEo/export?format=csv",
-    "https://www.chiesacattolica.it/la-liturgia-delle-ore/",
-    "https://www.chiesacattolica.it/liturgia-del-giorno/"
+    "https://docs.google.com/spreadsheets/d/1FVN90zGMNJbKOiBJWCVdVH7UFI74yny4G-3vJBzwrEo/export?format=csv"
 ];
 
 // Install event to cache the pages and assets
