@@ -73,7 +73,7 @@ function createListItem(page, validPages) {
     itemDiv.addEventListener('click', () => {
         // Check if the clicked item has children by looking for other rows with this 'id' as the parent
         const hasChildren = isParentForOtherRows(page.id, validPages); // Pass validPages here
-
+    
         if (hasChildren) {
             // If there are child items, reload the same page with 'parent' set to this item's 'id'
             window.location.href = `items.html?parent=${page.id}`;
@@ -83,7 +83,7 @@ function createListItem(page, validPages) {
                 // Redirect to the custom page based on 'id'
                 window.location.href = `/pages/custom/${page.id}.html`;
             } else {
-                // If the 'custom_page' is not "TRUE",check if external_link is provided
+                // If the 'custom_page' is not "TRUE", check if external_link is provided
                 if (page.external_link) {
                     // Generate a timestamp to append to the URL
                     const timestamp = new Date().getTime();
@@ -93,15 +93,19 @@ function createListItem(page, validPages) {
                     
                     // Redirect to the URL with the timestamp
                     window.location.href = urlWithTimestamp;
-                }
-                 else {
+                } else {
                     // Otherwise, redirect to the 'single-item.html' page with 'id' as a URL parameter
-                    window.location.href = `single-item.html?id=${page.id}`;
+                    const currentDate = new Date(); // Get the current date
+                    const dayOfMonth = currentDate.getDate(); // Get the day of the month
+    
+                    // Redirect to 'single-item.html' with the 'id' and anchor (cal + day of the month)
+                    window.location.href = `single-item.html?id=${page.id}#cal${dayOfMonth}`;
                 }
             }
         }
     });
-
+    
+    
     return itemDiv;
 }
 
