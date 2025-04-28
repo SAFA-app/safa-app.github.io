@@ -52,21 +52,32 @@ function parseTimestamp(timestamp) {
 // Accepts an argument `forceFresh` to force fetching fresh data (if true), else it defaults to local storage.
 export async function getValidPages(forceFresh = false) {
     try {
+        console.log(`getValidPages called with forceFresh: ${forceFresh}`);
+
         if (!forceFresh) {
             const cachedPages = getPagesFromLocalStorage();
             if (cachedPages) {
                 console.log("Pages fetched from local storage.");
                 return cachedPages; // Return cached data if available
+            } else {
+                console.log("No cached pages found. Fetching fresh data...");
             }
         }
 
         // Attempt to fetch fresh data from the server
+        console.log("Fetching pages data...");
         const pagesData = await fetchCSVData(config.pagesTable);
+        console.log("Fetching deleted data...");
         const deletedData = await fetchCSVData(config.deletedTable);
 
+        // Check if deleted data is empty
+        if (deletedData.length === 0) {
+            console.warn("No deleted pages found. Skipping deleted data filtering.");
+        }
+
         // If fetching fresh data fails or returns no data, return the cached pages
-        if (!pagesData || !deletedData || pagesData.length === 0 || deletedData.length === 0) {
-            console.error("Failed to fetch data, returning cached pages.");
+        if (!pagesData || pagesData.length === 0) {
+            console.error("Failed to fetch pages data, returning cached pages.");
             const cachedPages = getPagesFromLocalStorage();
             if (cachedPages) {
                 console.log("Returning cached valid pages.");
@@ -79,6 +90,7 @@ export async function getValidPages(forceFresh = false) {
         const recentPages = filterMostRecentPages(pagesData);
         const validPages = filterDeletedPages(recentPages, deletedData);
 
+        console.log(`Filtered valid pages: ${validPages.length} pages`);
         savePagesToLocalStorage(validPages); // Save valid pages to local storage
         console.log("Valid Pages Table with Original Fields:", validPages);
 
@@ -95,6 +107,7 @@ export async function getValidPages(forceFresh = false) {
         return []; // Return empty array if no cached pages exist
     }
 }
+
 
 // Save valid pages to localStorage
 function savePagesToLocalStorage(pages) {
@@ -169,4 +182,56 @@ export async function downloadValidPagesCSV() {
     } catch (error) {
         console.error("Error downloading valid pages CSV:", error);
     }
+}
+
+
+/**
+ * Reorder pages based on the 'category' field.
+ * Pages with a valid 'category' value will be placed in the specified position.
+ * Pages without a 'category' value or with invalid values will retain their original order.
+ * @param {Array} pages - The list of pages to reorder.
+ * @returns {Array} - The reordered list of pages.
+ */
+export function reorderPagesByCategory(pages) {
+    const orderedPages = [];
+    const unorderedPages = [];
+
+    // Create a map to store pages with valid 'category' values
+    const categoryMap = new Map();
+
+    pages.forEach(page => {
+        const category = parseInt(page.category, 10);
+        if (!isNaN(category) && category > 0) {
+            // Handle duplicate categories by keeping the first occurrence
+            if (!categoryMap.has(category)) {
+                categoryMap.set(category, page);
+            } else {
+                console.warn(`Duplicate category value detected: ${category}. Keeping the first occurrence.`);
+            }
+        } else {
+            unorderedPages.push(page); // Pages without valid 'category' values
+        }
+    });
+
+    // Sort the categoryMap by category keys and add them to the orderedPages array
+    Array.from(categoryMap.keys())
+        .sort((a, b) => a - b)
+        .forEach(category => {
+            orderedPages[category - 1] = categoryMap.get(category); // Place in the correct position (0-based index)
+        });
+
+    // Fill in gaps with unordered pages while maintaining their original order
+    let unorderedIndex = 0;
+    for (let i = 0; i < orderedPages.length || unorderedIndex < unorderedPages.length; i++) {
+        if (!orderedPages[i]) {
+            orderedPages[i] = unorderedPages[unorderedIndex++];
+        }
+    }
+
+    // Append any remaining unordered pages
+    while (unorderedIndex < unorderedPages.length) {
+        orderedPages.push(unorderedPages[unorderedIndex++]);
+    }
+
+    return orderedPages;
 }
