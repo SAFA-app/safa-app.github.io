@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles.css">
+    <title>Mese del fondatore 2025</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+    <style>
+        canvas {
+            display: block;
+            margin: 20px auto;
+            max-width: 100%;
+        }
+        .pdf-container {
+            padding: 10px;
+            width: 100%;
+            overflow-x: hidden;
+        }
+        @media (max-width: 600px) {
+            canvas {
+                width: 100% !important;
+            }
+        }
+    </style>
+    <script>
+        window.onload = function() {
+            // Mappatura giorno->pagina per il mese di novembre.
+            // Personalizza i valori per ogni giorno (1..30). Esempio: il giorno 10 apre la pagina 8.
+            const novemberDayToPage = {
+                1: 2, 2: 2, 3: 3, 4: 3, 5: 3,
+                6: 4, 7: 4, 8: 5, 9: 5, 10: 5, // <--- esempio richiesto: 10 -> pagina 8
+                11: 6, 12: 6, 13: 7, 14: 7, 15: 7,
+                16: 8, 17: 8, 18: 9, 19: 9, 20: 10,
+                21: 10, 22: 10, 23: 11, 24: 11, 25: 11,
+                26: 12, 27: 12, 28: 12, 29: 13, 30: 13
+            };
+
+            // Get current date info
+            const now = new Date();
+            const currentMonth = now.getMonth() + 1; // 1-12
+            const currentDay = now.getDate(); // 1-31
+
+            // Decide start page:
+            // - se siamo a novembre, usa la mappatura giorno->pagina (fallback a 1 se giorno non mappato)
+            // - altrimenti usa pagina 1 (o modifica come preferisci)
+            const startPageNumber = (currentMonth === 11)
+                ? (novemberDayToPage[currentDay] || 1)
+                : 1;
+
+             // PDF URL (ensure it’s cached in the PWA's service worker for offline use)
+             const pdfUrl = '/pages/custom/ConFratelGabriel_2025_IT.pdf';
+ 
+             // Function to load and render the PDF using PDF.js
+             function loadPDF(pdfUrl) {
+                 pdfjsLib.getDocument(pdfUrl).promise.then(function(pdf) {
+                     // Function to render each page
+                     function renderPage(pageNumber) {
+                         pdf.getPage(pageNumber).then(function(page) {
+                             const scale = 1.5;  // Adjust scale for better clarity
+                             const viewport = page.getViewport({ scale: scale });
+ 
+                             const canvas = document.createElement('canvas');
+                             const context = canvas.getContext('2d');
+                             document.getElementById('pdfContainer').appendChild(canvas); // Add canvas to the container
+ 
+                             canvas.height = viewport.height;
+                             canvas.width = viewport.width;
+ 
+                             // Render the page into the canvas context
+                             page.render({
+                                 canvasContext: context,
+                                 viewport: viewport
+                             });
+                         });
+                     }
+ 
+                     // Render all pages
+                     for (let i = 1; i <= pdf.numPages; i++) {
+                         renderPage(i);
+                     }
+ 
+                     // Scroll to the current month's page after rendering
+                     setTimeout(() => {
+                         const pageToScroll = Math.max(0, startPageNumber - 1); // 0-based index
+                         const targetCanvas = document.querySelectorAll('canvas')[pageToScroll];
+                         if (targetCanvas) {
+                             targetCanvas.scrollIntoView({
+                                 behavior: 'smooth',
+                                 block: 'start'
+                             });
+                         }
+                     }, 1000); // Delay to ensure rendering is completed
+ 
+                 }).catch(function(error) {
+                     console.error('Error loading PDF: ', error);
+                 });
+             }
+ 
+             // Check if the PDF is available in the cache (using service worker caching)
+             if ('caches' in window) {
+                 caches.match(pdfUrl).then(function(response) {
+                     if (response) {
+                         console.log("Using cached PDF...");
+                         loadPDF(response); // Load from cache
+                     } else {
+                         console.log("Fetching PDF from the network...");
+                         loadPDF(pdfUrl); // Load from network
+                     }
+                 });
+             }
+ 
+         };
+     </script>
+</head>
+<body>
+    <h2>Mese del fondatore 2025</h2>
+    <div class="pdf-container" id="pdfContainer">
+        <!-- Canvas elements will be appended here -->
+    </div>
+    <footer id="sticky-footer">
+        <button id="back-button">Indietro</button>
+    </footer>
+    <script src="/main.js"></script>
+</body>
+</html>
