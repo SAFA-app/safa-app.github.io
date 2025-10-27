@@ -87,14 +87,26 @@ function createListItem(page, validPages) {
             } else {
                 // If the 'custom_page' is not "TRUE", check if external_link is provided
                 if (page.external_link) {
-                    // Generate a timestamp to append to the URL
-                    const timestamp = new Date().getTime();
-                    
-                    // Append the timestamp as a query parameter to avoid caching
-                    const urlWithTimestamp = `${page.external_link}?timestamp=${timestamp}`;
-                    
-                    // Redirect to the URL with the timestamp
-                    window.location.href = urlWithTimestamp;
+                    // If the external link points to a PDF, do not append a timestamp.
+                    // Otherwise append a timestamp to avoid caching. If the URL already has query params use '&'.
+                    const isPdfLink = (url) => {
+                        try {
+                            const parsed = new URL(url, window.location.href);
+                            return parsed.pathname.toLowerCase().endsWith('.pdf');
+                        } catch (e) {
+                            // Fallback: simple string check
+                            return String(url).toLowerCase().split('?')[0].endsWith('.pdf');
+                        }
+                    };
+
+                    if (isPdfLink(page.external_link)) {
+                        window.location.href = page.external_link;
+                    } else {
+                        const timestamp = new Date().getTime();
+                        const separator = page.external_link.includes('?') ? '&' : '?';
+                        const urlWithTimestamp = `${page.external_link}${separator}timestamp=${timestamp}`;
+                        window.location.href = urlWithTimestamp;
+                    }
                 } else {
                     // Otherwise, redirect to the 'single-item.html' page with 'id' as a URL parameter
                     const currentDate = new Date(); // Get the current date
@@ -102,18 +114,18 @@ function createListItem(page, validPages) {
     
                     // Redirect to 'single-item.html' with the 'id' and anchor (cal + day of the month)
                     window.location.href = `single-item.html?id=${page.id}#cal${dayOfMonth}`;
-                }
-            }
-        }
-    });
-    
-    
-    return itemDiv;
-}
-
-
-
-// Function to check if the page has children (rows with this 'id' in the 'parent' field)
-function isParentForOtherRows(parentId, validPages) {
-    return validPages.some(page => page.parent === parentId);
-}
+                 }
+             }
+         }
+     });
+     
+     
+     return itemDiv;
+ }
+ 
+ 
+ 
+ // Function to check if the page has children (rows with this 'id' in the 'parent' field)
+ function isParentForOtherRows(parentId, validPages) {
+     return validPages.some(page => page.parent === parentId);
+ }
