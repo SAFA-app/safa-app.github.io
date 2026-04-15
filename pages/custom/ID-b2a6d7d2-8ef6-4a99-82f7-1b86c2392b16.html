@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/styles.css">
     <title>Compleanni e memorie defunti</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+    <script src="/js/libs/pdf.min.js"></script>
     <style>
         canvas {
             display: block;
@@ -24,6 +24,7 @@
         }
     </style>
     <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = '/js/libs/pdf.worker.min.js';
         window.onload = function() {
             // Mapping of months to page numbers
             const monthsToPages = {
